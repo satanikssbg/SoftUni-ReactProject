@@ -1,0 +1,42 @@
+{
+    "1": {
+        "id": "1",
+        "region": "Силистра",
+        "slug": "silistra"
+    },
+    "2": {
+        "id": "2",
+        "region": "Тутракан",
+        "slug": "tutrakan"
+    },
+    "3": {
+        "id": "3",
+        "region": "Дулово",
+        "slug": "dulovo"
+    },
+    "4": {
+        "id": "4",
+        "region": "Главиница",
+        "slug": "glavinica"
+    },
+    "5": {
+        "id": "5",
+        "region": "Ситово",
+        "slug": "sitovo"
+    },
+    "6": {
+        "id": "6",
+        "region": "Кайнарджа",
+        "slug": "kaynardzha"
+    },
+    "7": {
+        "id": "7",
+        "region": "Алфатар",
+        "slug": "alfatar"
+    },
+    "8": {
+        "id": "8",
+        "region": "България",
+        "slug": "bulgaria"
+    }
+}
