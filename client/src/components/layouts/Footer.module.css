@@ -1,0 +1,5 @@
+.footerLinks a:not(:last-child) {
+    border-right: 1px solid #fff;
+    margin-right: 10px;
+    padding-right: 10px;
+}

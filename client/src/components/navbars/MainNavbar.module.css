@@ -1,0 +1,17 @@
+.navItemLinkActive {
+    background-color: #0f6674;
+}
+
+.navLinks {
+    padding: 0px;
+}
+
+.navLinks a {
+    padding: 25px 10px 24px 10px;
+}
+
+@media (max-width: 992px) {
+    .navLinks a {
+        padding: 27px 10px 25px 10px;
+    }
+}
