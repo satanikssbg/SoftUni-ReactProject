@@ -21,17 +21,6 @@ const FormKeys = {
 };
 
 const AddNews = () => {
-    const navigate = useNavigate();
-
-    const { isAuthenticated } = useContext(AuthContext);
-
-    useEffect(() => {
-        if (!isAuthenticated) {
-            navigate('/');
-        }
-
-    }, [isAuthenticated]);
-
     const addNewSubmitHandler = async (values) => {
         const query = new URLSearchParams({
             select: `id,title`,
