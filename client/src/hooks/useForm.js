@@ -47,7 +47,6 @@ const useForm = (submitHandler, initialValues, validation) => {
                 submitHandler(values)
                     .then()
                     .catch(error => {
-                        console.error(error);
                         setErrors({ submit: error.message });
                     });
             }

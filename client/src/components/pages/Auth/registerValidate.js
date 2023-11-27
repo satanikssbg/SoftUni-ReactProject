@@ -1,7 +1,6 @@
 import { omit } from 'lodash';
 
 const registerValidate = (errors, name, value, values = {}) => {
-    console.log(values);
     switch (name) {
         case 'username':
             if (value.length <= 0) {

@@ -32,23 +32,29 @@ const request = async (method, url, data) => {
             return {};
         }
 
-        if (!response.ok && response.status === 403 && localStorage.getItem("accessToken")) {
-            const result = await response.json();
+        const result = await response.json();
 
-            if (result.message === "Invalid access token" && result.code === 403) {
-                localStorage.removeItem('accessToken');
+        if (!response.ok && response.status === 403) {
+            if (result.code === 403 && (result.message === "Invalid access token" || result.message === "User session does not exist")) {
+                if (localStorage.getItem('accessToken')) {
+                    localStorage.removeItem('accessToken');
+                }
+
+                if (localStorage.getItem('auth')) {
+                    localStorage.removeItem('auth');
+                }
+
+                window.location.href = '/';
             }
         }
 
         if (!response.ok) {
-            throw new Error(`Error HTTP status: ${response.status}`);
+            throw result.message;
         }
 
-        const result = await response.json();
-
         return result;
-    } catch (error) {
-        throw new Error(`Error fetching: ${response.status}`);
+    } catch (err) {
+        throw new Error(err);
     }
 };
 

@@ -25,23 +25,15 @@ const MainMobileNavbar = () => {
 
     useEffect(() => {
         const fetchNewsCategories = async () => {
-            try {
-                const fetchedCategories = await getNewsCategories(abortController.signal);
-                setNewsCategories(objectChunk(fetchedCategories, 4));
-            } catch (error) {
-                console.log('Error', error);
-            }
+            const fetchedCategories = await getNewsCategories();
+            setNewsCategories(objectChunk(fetchedCategories, 4));
         };
 
         fetchNewsCategories();
 
         const fetchRegions = async () => {
-            try {
-                const fetchedRegions = await getRegions(abortController.signal);
-                setRegions(objectChunk(fetchedRegions, 4));
-            } catch (error) {
-                console.log('Error', error);
-            }
+            const fetchedRegions = await getRegions();
+            setRegions(objectChunk(fetchedRegions, 4));
         }
 
         fetchRegions();
