@@ -1,3 +1,4 @@
+
 const buildOptions = (data) => {
     const options = {};
 
@@ -29,6 +30,14 @@ const request = async (method, url, data) => {
 
         if (response.status === 204) {
             return {};
+        }
+
+        if (!response.ok && response.status === 403 && localStorage.getItem("accessToken")) {
+            const result = await response.json();
+
+            if (result.message === "Invalid access token" && result.code === 403) {
+                localStorage.removeItem('accessToken');
+            }
         }
 
         if (!response.ok) {
