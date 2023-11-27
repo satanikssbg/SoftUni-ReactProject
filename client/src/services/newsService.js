@@ -1,54 +1,40 @@
-const baseUrl = 'http://localhost:3030/jsonstore';
+import * as request from '../lib/request';
 
-export const getNewsCategories = async (signal) => {
-    try {
-        const response = await fetch(`${baseUrl}/newsCategories`, { signal });
+import Path from '../paths';
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+export const createNew = async (title) => {
+    const result = await request.post(Path.News, { title });
 
-        const result = await response.json();
-        const data = Object.values(result);
+    return result;
+}
 
-        const sortedData = data.sort((a, b) => a.category.localeCompare(b.category));
+export const getNewsCategories = async () => {
+    const result = await request.get(Path.GetCategories);
+    const data = Object.values(result);
 
-        return sortedData;
-    } catch (error) {
-        console.error('Error fetching news categories:', error);
-        throw error;
-    }
+    const sortedData = data.sort((a, b) => a.category.localeCompare(b.category));
+
+    return sortedData;
 };
 
-export const getRegions = async (signal) => {
-    try {
-        const response = await fetch(`${baseUrl}/regions`, { signal });
+export const getRegions = async () => {
+    const result = await request.get(Path.GetRegions);
+    const data = Object.values(result);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+    const regionsArray = Object.values(data);
+
+    regionsArray.sort((a, b) => {
+        const regionA = a.region.toLowerCase();
+        const regionB = b.region.toLowerCase();
+
+        if (regionA === "българия") {
+            return 1;
+        } else if (regionB === "българия") {
+            return -1;
+        } else {
+            return regionA.localeCompare(regionB);
         }
+    });
 
-        const result = await response.json();
-        const data = Object.values(result);
-
-        const regionsArray = Object.values(data);
-
-        regionsArray.sort((a, b) => {
-            const regionA = a.region.toLowerCase();
-            const regionB = b.region.toLowerCase();
-
-            if (regionA === "българия") {
-                return 1;
-            } else if (regionB === "българия") {
-                return -1;
-            } else {
-                return regionA.localeCompare(regionB);
-            }
-        });
-
-        return regionsArray;
-    } catch (error) {
-        console.error('Error fetching news categories:', error);
-        throw error;
-    }
+    return regionsArray;
 };
