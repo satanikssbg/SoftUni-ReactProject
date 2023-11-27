@@ -1,4 +1,7 @@
+import { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+
+import AuthContext from '../../contexts/authContext';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -6,6 +9,8 @@ import Nav from 'react-bootstrap/Nav';
 import styles from './MainNavbar.module.css';
 
 const MainNavbar = () => {
+    const { isAuthenticated } = useContext(AuthContext);
+
     return (
         <>
             <Navbar id="mainMenu" className="navbar bg-portal" variant="dark" expand="md" sticky="top">
@@ -66,20 +71,39 @@ const MainNavbar = () => {
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/news" className={({ isActive }) => `nav-link ${isActive && (styles.navItemLinkActive)}`}>
+                                <NavLink to="/news" end className={({ isActive }) => `nav-link ${isActive && (styles.navItemLinkActive)}`}>
                                     Новини
                                 </NavLink>
                             </li>
-                            <li className="nav-item">
-                                <NavLink to="/register" className={({ isActive }) => `nav-link ${isActive && (styles.navItemLinkActive)}`}>
-                                    Регистрация
-                                </NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink to="/login" className={({ isActive }) => `nav-link ${isActive && (styles.navItemLinkActive)}`}>
-                                    Вход
-                                </NavLink>
-                            </li>
+
+                            {!isAuthenticated ? (
+                                <>
+                                    <li className="nav-item">
+                                        <NavLink to="/register" className={({ isActive }) => `nav-link ${isActive && (styles.navItemLinkActive)}`}>
+                                            Регистрация
+                                        </NavLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <NavLink to="/login" className={({ isActive }) => `nav-link ${isActive && (styles.navItemLinkActive)}`}>
+                                            Вход
+                                        </NavLink>
+                                    </li>
+                                </>
+                            ) : (
+                                <>
+                                    <li className="nav-item">
+                                        <NavLink to="/news/add" className={({ isActive }) => `nav-link ${isActive && (styles.navItemLinkActive)}`}>
+                                            + Новина
+                                        </NavLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <NavLink to="/logout" className={({ isActive }) => `nav-link ${isActive && (styles.navItemLinkActive)}`}>
+                                            Изход
+                                        </NavLink>
+                                    </li>
+                                </>
+                            )}
+
                             <li className="d-none d-sm-none d-md-block d-lg-block d-xl-block">
                                 <Link
                                     to="#"

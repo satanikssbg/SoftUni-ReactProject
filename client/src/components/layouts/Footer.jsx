@@ -1,7 +1,13 @@
+import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
+
+import AuthContext from "../../contexts/authContext";
+
 import styles from "./Footer.module.css";
 
 const Footer = () => {
+    const { isAuthenticated } = useContext(AuthContext);
+
     const thisDate = new Date();
     const thisYear = thisDate.getFullYear();
 
@@ -55,12 +61,18 @@ const Footer = () => {
                             <Link to="/news" title="Новини">
                                 Новини
                             </Link>
-                            <Link to="/register" title="Регистрация">
-                                Регистрация
-                            </Link>
-                            <Link to="/login" title="Вход">
-                                Вход
-                            </Link>
+
+                            {!isAuthenticated && (
+                                <>
+                                    <Link to="/register" title="Регистрация">
+                                        Регистрация
+                                    </Link>
+                                    <Link to="/login" title="Вход">
+                                        Вход
+                                    </Link>
+                                </>
+                            )}
+
                             <Link to="/contacts" title="Контакти">
                                 Контакти
                             </Link>

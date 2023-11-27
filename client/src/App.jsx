@@ -1,5 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 
+import { AuthProvider } from './contexts/authContext';
+
 import MainNavbar from './components/navbars/MainNavbar';
 import MainMobileNavbar from './components/navbars/MainMobileNavbar';
 import SilistraNavbar from './components/navbars/SilistraNavbar';
@@ -16,12 +18,17 @@ import LogoutPage from './components/pages/Auth/LogoutPage';
 
 import ErrorPage from './components/pages/ErrorPage';
 
+import { ToastContainer } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+import AddNews from './components/pages/News/AddNews';
+
 function App() {
     const location = useLocation();
     const { pathname } = location;
 
     return (
-        <>
+        <AuthProvider>
             <MainNavbar />
             {pathname.startsWith('/silistra') && (<SilistraNavbar />)}
             <MainMobileNavbar />
@@ -30,7 +37,8 @@ function App() {
                 <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/silistra/*" element={<SilistraPage />} />
-                    <Route path="/news/*" element={<NewsPage />} />
+                    <Route path="/news/add" element={<AddNews />} />
+                    <Route path="/news" element={<NewsPage />} />
 
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
@@ -46,8 +54,21 @@ function App() {
             </div>
 
             <Footer />
-        </>
-    )
-}
 
-export default App
+            <ToastContainer
+                position="bottom-right"
+                autoClose={2000}
+                hideProgressBar={true}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                pauseOnHover
+                draggable={false}
+                theme="colored"
+            />
+        </AuthProvider>
+    );
+};
+
+export default App;

@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Search from '../Search';
 import { useEffect, useState, useRef } from 'react';
@@ -7,8 +7,12 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import { getNewsCategories, getRegions } from '../../services/newsService';
 import { objectChunk } from '../../utils/functionsUtils';
+import AuthContext from '../../contexts/authContext';
 
 const MainMobileNavbar = () => {
+    const { isAuthenticated } = useContext(AuthContext);
+
+
     const dropdownMenuRef = useRef(null);
 
     const [newsCategories, setNewsCategories] = useState([]);
@@ -94,11 +98,14 @@ const MainMobileNavbar = () => {
                                         Регистрация
                                     </Nav.Link>
                                 </li>
-                                <li className="nav-item">
-                                    <Nav.Link href='/login' to='/login' as={Link} className="nav-link">
-                                        Вход
-                                    </Nav.Link>
-                                </li>
+                                {isAuthenticated && (
+                                    <li className="nav-item">
+                                        <Nav.Link href='/login' to='/login' as={Link} className="nav-link">
+                                            Вход
+                                        </Nav.Link>
+                                    </li>
+                                )}
+
                                 <li className="nav-item">
                                     <Nav.Link href='/contacts' to='/contacts' as={Link} className="nav-link">
                                         Контакти
