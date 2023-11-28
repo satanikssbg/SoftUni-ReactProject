@@ -2,39 +2,43 @@ import * as request from '../lib/request';
 
 import Path from '../paths';
 
-export const createNew = async (title) => {
-    const result = await request.post(Path.News, { title });
+export const createNew = async ({ title, category, region, article, img }) => {
+    const result = await request.post(Path.News, {
+        title,
+        category,
+        region,
+        article,
+        img
+    }).then(res => res.json());
 
     return result;
 }
 
-export const getNewsCategories = async () => {
+export const allNews = async () => {
+    const query = new URLSearchParams({
+        offset: '1',
+        pageSize: '1',
+        load: [
+            'region=region:regions',
+            'category=category:categories'
+        ]
+    });
+
+    //const queryString = query.toString().replace(/\+/g, '%20');
+
+    const result = await request.get(`${Path.News}?${query}`);
+
+    return result;
+}
+
+export const getCategories = async () => {
     const result = await request.get(Path.GetCategories);
-    const data = Object.values(result);
 
-    const sortedData = data.sort((a, b) => a.category.localeCompare(b.category));
-
-    return sortedData;
-};
+    return result;
+}
 
 export const getRegions = async () => {
     const result = await request.get(Path.GetRegions);
-    const data = Object.values(result);
 
-    const regionsArray = Object.values(data);
-
-    regionsArray.sort((a, b) => {
-        const regionA = a.region.toLowerCase();
-        const regionB = b.region.toLowerCase();
-
-        if (regionA === "българия") {
-            return 1;
-        } else if (regionB === "българия") {
-            return -1;
-        } else {
-            return regionA.localeCompare(regionB);
-        }
-    });
-
-    return regionsArray;
+    return result;
 };

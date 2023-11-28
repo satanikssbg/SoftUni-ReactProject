@@ -5,17 +5,19 @@ import { useEffect, useState, useRef } from 'react';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import { getRegions } from '../../services/newsService';
+import { getNewsCategories, getRegions } from '../../services/newsService';
 import { objectChunk } from '../../utils/functionsUtils';
 import AuthContext from '../../contexts/authContext';
-import NewsContext from '../../contexts/newsContext';
 
 const MainMobileNavbar = () => {
     const { isAuthenticated } = useContext(AuthContext);
-    let { categories, regions } = useContext(NewsContext);
+    const { categories, regions } = useContext(NewsContext);
 
 
     const dropdownMenuRef = useRef(null);
+
+    let indexRegions = 0;
+    let indexNewsCategories = 0;
 
     useEffect(() => {
         const handleDropdownMenuClick = (event) => {
@@ -29,17 +31,11 @@ const MainMobileNavbar = () => {
         return () => {
             document.removeEventListener('click', handleDropdownMenuClick);
         };
-    });
+    }, []);
 
     const closeDropdownMenu = () => {
         $(dropdownMenuRef.current).collapse('hide');
     };
-
-    let indexRegions = 0;
-    let indexCategories = 0;
-
-    categories = objectChunk(categories, 4);
-    regions = objectChunk(regions, 4);
 
     return (
         <>
@@ -122,11 +118,11 @@ const MainMobileNavbar = () => {
                             style={{ borderBottom: "1px solid #dcdede", width: "100%" }}
                         />
 
-                        {categories.map((row, index) => {
-                            indexCategories += 1;
+                        {newsCategories.map((row, index) => {
+                            indexNewsCategories += 1;
 
                             return (
-                                <div key={index} className={`${indexCategories !== 2 && ('menuLineMd')} ${(indexCategories === 1 || indexCategories === 3) && ('menulineSm')} menuLineLG col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2`}>
+                                <div key={index} className={`${indexNewsCategories !== 2 && ('menuLineMd')} ${(indexNewsCategories === 1 || indexNewsCategories === 3) && ('menulineSm')} menuLineLG col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2`}>
                                     <ul className="navbar-nav ml-auto flex-nowrap">
                                         {Object.values(row).map(({ category, slug }, id) => (
                                             <li className="nav-item" key={id}>

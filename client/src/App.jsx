@@ -10,7 +10,7 @@ import Footer from "./components/layouts/Footer"
 
 import HomePage from "./components/pages/HomePage"
 import SilistraPage from "./components/pages/SilistraPage"
-import NewsPage from './components/pages/NewsPage';
+import News from './components/pages/News/News';
 
 import LoginPage from './components/pages/Auth/LoginPage';
 import RegisterPage from './components/pages/Auth/RegisterPage';
@@ -24,6 +24,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AddNews from './components/pages/News/AddNews';
 
 import AuthGuard from './guards/AuthGuard';
+import { NewsProvider } from './contexts/newsContext';
 
 function App() {
     const location = useLocation();
@@ -31,49 +32,51 @@ function App() {
 
     return (
         <AuthProvider>
-            <MainNavbar />
-            {pathname.startsWith('/silistra') && (<SilistraNavbar />)}
-            <MainMobileNavbar />
+            <NewsProvider>
+                <MainNavbar />
+                {pathname.startsWith('/silistra') && (<SilistraNavbar />)}
+                <MainMobileNavbar />
 
-            <div id="content" className="container" style={{ marginTop: '20px' }}>
-                <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/silistra/*" element={<SilistraPage />} />
+                <div id="content" className="container" style={{ marginTop: '20px' }}>
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/silistra/*" element={<SilistraPage />} />
 
-                    <Route path="/news" element={<NewsPage />} />
+                        <Route path="/news" element={<News />} />
 
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/register" element={<RegisterPage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/register" element={<RegisterPage />} />
 
 
-                    <Route element={<AuthGuard />}>
-                        <Route path="/news/add" element={<AddNews />} />
-                        <Route path="/logout" element={<LogoutPage />} />
-                    </Route>
+                        <Route element={<AuthGuard />}>
+                            <Route path="/news/add" element={<AddNews />} />
+                            <Route path="/logout" element={<LogoutPage />} />
+                        </Route>
 
-                    <Route path="*" element={<ErrorPage />} />
-                </Routes>
-            </div>
+                        <Route path="*" element={<ErrorPage />} />
+                    </Routes>
+                </div>
 
-            <div id="backgroundGlobal" className="d-none d-md-block">
-                <div id="backgroundGlobalLeft"></div>
-                <div id="backgroundGlobalRight"></div>
-            </div>
+                <div id="backgroundGlobal" className="d-none d-md-block">
+                    <div id="backgroundGlobalLeft"></div>
+                    <div id="backgroundGlobalRight"></div>
+                </div>
 
-            <Footer />
+                <Footer />
 
-            <ToastContainer
-                position="bottom-right"
-                autoClose={2000}
-                hideProgressBar={true}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                pauseOnHover
-                draggable={false}
-                theme="colored"
-            />
+                <ToastContainer
+                    position="bottom-right"
+                    autoClose={2000}
+                    hideProgressBar={true}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    pauseOnHover
+                    draggable={false}
+                    theme="colored"
+                />
+            </NewsProvider>
         </AuthProvider>
     );
 };
