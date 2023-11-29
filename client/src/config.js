@@ -1,4 +1,10 @@
 const APP_URL = 'http://localhost:5173';
 const API_URL = 'http://localhost:3030';
 
-export { APP_URL, API_URL };
+const PER_PAGE = Number(3);
+
+export {
+    APP_URL,
+    API_URL,
+    PER_PAGE
+};

@@ -1,3 +1,4 @@
+import { PER_PAGE } from '../config';
 import * as request from '../lib/request';
 
 import Path from '../paths';
@@ -15,9 +16,15 @@ export const createNew = async ({ title, category, region, article, img }) => {
 }
 
 export const allNews = async () => {
+    //TODO
+}
+
+export const newsPaginate = async (page) => {
+    let OFFSET = (page - 1) * PER_PAGE;
+
     const query = new URLSearchParams({
-        offset: '1',
-        pageSize: '1',
+        offset: `${OFFSET}`,
+        pageSize: `${PER_PAGE}`,
         load: [
             'region=region:regions',
             'category=category:categories'
@@ -27,6 +34,14 @@ export const allNews = async () => {
     //const queryString = query.toString().replace(/\+/g, '%20');
 
     const result = await request.get(`${Path.News}?${query}`);
+    //const result = await request.get(`http://localhost:3030/data/regions?${query}`);
+
+    return result;
+}
+
+export const allNewsCount = async () => {
+    const result = await request.get(`${Path.News}?count`);
+    //const result = await request.get(`http://localhost:3030/data/regions?count`);
 
     return result;
 }

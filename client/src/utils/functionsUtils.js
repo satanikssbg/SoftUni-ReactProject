@@ -13,3 +13,19 @@ export const objectChunk = (obj, size) => {
 
     return result;
 }
+
+export const stringLimiter = (string, maxLength) => {
+    if (string.length > maxLength) {
+        return string.slice(0, maxLength) + '...';
+    } else {
+        return string;
+    }
+};
+
+export const formatDateString = (inputDate) => {
+    const date = new Date(Number(inputDate));
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    const formattedDate = date.toLocaleDateString('bg-BG', options);
+
+    return formattedDate;
+}
