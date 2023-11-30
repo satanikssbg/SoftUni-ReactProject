@@ -49,6 +49,10 @@ const request = async (method, url, data) => {
                     localStorage.removeItem('accessToken');
                 }
 
+                if (localStorage.getItem('userRole')) {
+                    localStorage.removeItem('userRole');
+                }
+
                 if (localStorage.getItem('auth')) {
                     localStorage.removeItem('auth');
                 }
