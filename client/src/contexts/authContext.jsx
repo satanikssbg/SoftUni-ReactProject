@@ -60,7 +60,8 @@ export const AuthProvider = ({
         registerSubmitHandler,
         logoutHandler,
         isAuthenticated: !!auth.accessToken,
-        userRole: !!auth.role
+        userRole: !!auth.accessToken ? auth.role : false,
+        userId: !!auth.accessToken ? auth._id : false
     };
 
     return (

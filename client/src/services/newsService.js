@@ -10,7 +10,7 @@ export const createNew = async ({ title, category, region, article, img }) => {
         region,
         article,
         img
-    }).then(res => res.json());
+    });
 
     return result;
 }

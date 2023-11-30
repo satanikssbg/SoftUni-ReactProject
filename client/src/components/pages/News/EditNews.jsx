@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import useForm from "../../../hooks/useForm";
 import { removeKeysForForms } from "../../../utils/functionsUtils";
 import NewsContext from "../../../contexts/newsContext";
+import AuthContext from "../../../contexts/authContext";
 import addNewsValidate from "./addNewsValidate";
 import Loading from "../../layouts/Loading";
 
@@ -19,15 +20,16 @@ const FormKeys = {
 
 const EditNews = () => {
     const { id } = useParams();
+    const { isAuthenticated, userRole } = useContext(AuthContext);
     const { categories, regions } = useContext(NewsContext);
-
 
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
-    const editNewSubmitHandler = () => {
-        setLoading(true);
+    const editNewSubmitHandler = async (values) => {
+
+
     };
 
     const [article, setArticle] = useState({});
