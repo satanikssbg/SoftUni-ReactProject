@@ -131,7 +131,7 @@ const MainMobileNavbar = () => {
                                         {Object.values(row).map(({ category, slug }, id) => (
                                             <li className="nav-item" key={id}>
                                                 <Link
-                                                    to={`/news/${slug}`}
+                                                    to={`/news/category/${slug}`}
                                                     className="nav-link"
                                                     title={`Новини в категория ${category}`}
                                                 >

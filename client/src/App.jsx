@@ -25,6 +25,8 @@ import AddNews from './components/pages/News/AddNews';
 
 import AuthGuard from './guards/AuthGuard';
 import { NewsProvider } from './contexts/newsContext';
+import Read from './components/pages/News/Read';
+import EditNews from './components/pages/News/EditNews';
 
 function App() {
     const location = useLocation();
@@ -43,6 +45,10 @@ function App() {
                         <Route path="/silistra/*" element={<SilistraPage />} />
 
                         <Route path="/news" element={<News />} />
+                        <Route path="/news/category/:slug" element={<News />} />
+                        <Route path="/news/region/:region" element={<News />} />
+                        <Route path="/news/:id" element={<Read />} />
+                        <Route path="/news/edit/:id" element={<EditNews />} />
 
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/register" element={<RegisterPage />} />

@@ -1,7 +1,14 @@
 import { Link } from "react-router-dom";
 
-const PaginateLinks = ({ currentPage, lastPage, paginateLink }) => {
+const PaginateLinks = ({ currentPage, lastPage, paginateLink, type = 'ALL', slug = null }) => {
     const onEachSide = 2;
+
+    const scrollClickHandler = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    };
 
     let start = currentPage - onEachSide;
     let end = currentPage + onEachSide;
@@ -21,8 +28,9 @@ const PaginateLinks = ({ currentPage, lastPage, paginateLink }) => {
         pages.push(
             <Link
                 key={i}
-                to={paginateLink(i)}
+                to={paginateLink(i, type, slug)}
                 className={currentPage === i ? 'currentPage' : ''}
+                onClick={scrollClickHandler}
             >
                 {i}
             </Link>
@@ -31,10 +39,10 @@ const PaginateLinks = ({ currentPage, lastPage, paginateLink }) => {
 
     return (
         <div className="paging d-none d-sm-none d-md-block d-lg-block d-xl-block">
-            {start > 1 && <Link to={paginateLink(1)}>&lt;&lt;</Link>}
+            {start > 1 && <Link to={paginateLink(1, type, slug)} onClick={scrollClickHandler}>&lt;&lt;</Link>}
 
             {currentPage > 1 && (
-                <Link to={paginateLink(currentPage - 1)} rel="prev" aria-label="Previous">
+                <Link to={paginateLink(currentPage - 1, type, slug)} rel="prev" aria-label="Previous" onClick={scrollClickHandler}>
                     &lt; Предишна
                 </Link>
             )}
@@ -42,12 +50,12 @@ const PaginateLinks = ({ currentPage, lastPage, paginateLink }) => {
             {pages}
 
             {currentPage < lastPage && (
-                <Link to={paginateLink(currentPage + 1)} rel="next" aria-label="Next">
+                <Link to={paginateLink(currentPage + 1, type, slug)} rel="next" aria-label="Next" onClick={scrollClickHandler}>
                     Следваща &gt;
                 </Link>
             )}
 
-            {end < lastPage && <Link to={paginateLink(lastPage)}>&gt;&gt;</Link>}
+            {end < lastPage && <Link to={paginateLink(lastPage, type, slug)} onClick={scrollClickHandler}>&gt;&gt;</Link>}
         </div>
     );
 };

@@ -1,24 +1,64 @@
 import { useEffect, useState } from 'react';
-import * as newsService from '../../../services/newsService';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+
 import { PER_PAGE } from '../../../config';
-import { Link, useSearchParams } from 'react-router-dom';
+
+import * as newsService from '../../../services/newsService';
+
 import PaginateLinks from '../../layouts/PaginateLinks';
 import NewsList from './NewsList';
+import Sidebar from '../../layouts/Sidebar';
 
 const News = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const paramPage = searchParams.get('page');
-
-    const [totalNews, setTotalNews] = useState(0);
-    const [totalPages, setTotalPages] = useState(Number(0));
-    const [currentPage, setCurrentPage] = useState(Number(1));
+    const [pageTitle, setPageTitle] = useState('Новини');
+    const [categoryId, setCategoryId] = useState('');
 
     const [news, setNews] = useState([]);
 
     const [loading, setLoading] = useState(false);
 
+    const [totalNews, setTotalNews] = useState(0);
+    const [totalPages, setTotalPages] = useState(Number(0));
+    const [currentPage, setCurrentPage] = useState(Number(1));
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const paramPage = searchParams.get('page');
+
+    const location = useLocation();
+    const { slug, region } = useParams();
+
+    const navigate = useNavigate();
+
+    let NewsType = "ALL";
+    let checkParam = null;
+
+    if (location.pathname.includes('/news/category') && slug) {
+        NewsType = "CATEGORY";
+        checkParam = slug;
+    } else if (location.pathname.includes('/news/region') && region) {
+        NewsType = "REGION";
+        checkParam = region;
+    }
+
+    if (checkParam) {
+        newsService.existCategoryRegion(NewsType, checkParam).then(res => {
+            if (res.length !== 1) {
+                navigate('/news');
+            } else {
+                const result = res[0];
+                setCategoryId(result._id);
+
+                if (NewsType === "CATEGORY") {
+                    setPageTitle(`Новини в кагегория ${result.category}`);
+                } else if (NewsType === "REGION") {
+                    setPageTitle(`Новини в регион ${result.region}`);
+                }
+            }
+        });
+    }
+
     useEffect(() => {
-        newsService.allNewsCount().then(result => {
+        newsService.allNewsCount(NewsType, categoryId).then(result => {
             if (typeof result === "number" && Number(result) >= 0) {
                 let calcPages = 1;
 
@@ -30,7 +70,7 @@ const News = () => {
                 setTotalPages(Number(calcPages));
             }
         });
-    });
+    }, [NewsType, categoryId]);
 
     useEffect(() => {
         if (paramPage <= 0 || paramPage === 1) {
@@ -48,12 +88,21 @@ const News = () => {
 
 
     useEffect(() => {
-        newsService.newsPaginate(currentPage).then(result => {
+        newsService.newsPaginate(currentPage, NewsType, categoryId).then(result => {
             setNews(result);
         });
-    }, [currentPage]);
+    }, [currentPage, NewsType, categoryId]);
 
-    const paginateLink = page => `/news?page=${page}`;
+
+    const paginateLink = (page, type, slug) => {
+        if (type === "CATEGORY") {
+            return `/news/category/${slug}?page=${page}`;
+        } else if (type === "REGION") {
+            return `/news/region/${slug}?page=${page}`;
+        }
+
+        return `/news?page=${page}`;
+    };
 
     return (
         <>
@@ -64,7 +113,7 @@ const News = () => {
                             <div className="obshtinaHeading">
                                 <div className="headingLine" />
                                 <div className="headingText">
-                                    Новини ({Number(totalNews)})
+                                    {pageTitle} ({Number(totalNews)})
                                 </div>
                             </div>
 
@@ -81,12 +130,16 @@ const News = () => {
                                             currentPage={currentPage}
                                             lastPage={totalPages}
                                             paginateLink={paginateLink}
+                                            type={NewsType}
+                                            slug={checkParam}
                                         />
                                     </>
                                 )}
                             </div>
                         </div>
                     </div>
+
+                    <Sidebar />
                 </div>
             </div>
         </>

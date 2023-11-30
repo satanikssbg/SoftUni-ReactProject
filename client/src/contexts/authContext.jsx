@@ -23,6 +23,7 @@ export const AuthProvider = ({
 
         setAuth(result);
         localStorage.setItem('accessToken', result.accessToken);
+        localStorage.setItem('userRole', result.role);
 
         toast.success('Вие се логнахте успешно.');
         toast.info(`Здравейте, ${result.username}.`);
@@ -35,6 +36,8 @@ export const AuthProvider = ({
 
         setAuth(result);
         localStorage.setItem('accessToken', result.accessToken);
+        localStorage.setItem('userRole', result.role);
+
 
         toast.success('Вие се регистрирахте успешно.');
         toast.info(`Здравейте, ${result.username}.`);
@@ -47,6 +50,7 @@ export const AuthProvider = ({
 
         setAuth({});
         localStorage.removeItem('accessToken');
+        localStorage.removeItem('userRole');
 
         navigate('/');
     }
@@ -56,6 +60,7 @@ export const AuthProvider = ({
         registerSubmitHandler,
         logoutHandler,
         isAuthenticated: !!auth.accessToken,
+        userRole: !!auth.role
     };
 
     return (

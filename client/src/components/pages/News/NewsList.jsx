@@ -7,7 +7,8 @@ const NewsList = ({
     article,
     region,
     category,
-    _createdOn
+    _createdOn,
+    img
 }) => {
     return (
         <>
@@ -15,7 +16,7 @@ const NewsList = ({
                 <div className="secondaryImage col-5 col-sm-4 col-md-4 col-lg-4 col-xl-4 {{ $new->video != '' ? 'isVideo' : '' }}">
                     <img
                         className="imageAspectRatio169"
-                        src="https://www.portal-silistra.eu/images/articles/eb4ef5baac581893aeaf84141d7a4e7f.webp"
+                        src={img}
                         alt={title}
                     />
                 </div>
@@ -32,11 +33,11 @@ const NewsList = ({
                             <i className="fas fa-tag" /> {category.category}
                         </span>{" "}
 
-                        <i class="far fa-calendar-alt"></i>
-                        <span class="d-none d-sm-none d-md-inline d-lg-inline d-xl-inline"></span> {formatDateString(_createdOn)}
+                        <i className="far fa-calendar-alt"></i>
+                        <span className="d-none d-sm-none d-md-inline d-lg-inline d-xl-inline"></span> {formatDateString(_createdOn)}
                     </div>
 
-                    <span class="newsPreview d-none d-sm-inline d-md-inline d-lg-inline d-xl-inline">
+                    <span className="newsPreview d-none d-sm-inline d-md-inline d-lg-inline d-xl-inline">
                         {stringLimiter(article, 160)}
                     </span>
                 </div>

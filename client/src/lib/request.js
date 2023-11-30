@@ -12,10 +12,19 @@ const buildOptions = (data) => {
     const token = localStorage.getItem('accessToken');
 
     if (token) {
+        const role = localStorage.getItem('userRole');
+
         options.headers = {
             ...options.headers,
             'X-Authorization': token,
         };
+
+        if (role === "admin" || role === "reporter") {
+            options.headers = {
+                ...options.headers,
+                'X-Admin': '',
+            };
+        }
     }
 
     return options;
