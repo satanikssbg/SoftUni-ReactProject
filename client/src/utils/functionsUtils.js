@@ -29,3 +29,7 @@ export const formatDateString = (inputDate) => {
 
     return formattedDate;
 }
+
+export const removeKeysForForms = (keys) => {
+    return Object.keys(keys).filter(key => !key.startsWith('_'));
+}

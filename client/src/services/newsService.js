@@ -19,6 +19,20 @@ export const allNews = async () => {
     //TODO
 }
 
+export const getOne = async (id) => {
+    const query = new URLSearchParams({
+        load: [
+            'region=region:regions',
+            'category=category:categories'
+        ]
+    });
+
+    const result = await request.get(`${Path.News}/${id}?${query}`);
+
+    return result;
+}
+
+
 export const newsPaginate = async (page, type = "ALL", categoryId = null) => {
     let OFFSET = (page - 1) * PER_PAGE;
 

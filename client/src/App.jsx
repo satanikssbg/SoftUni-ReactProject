@@ -31,7 +31,7 @@ import EditNews from './components/pages/News/EditNews';
 function App() {
     const location = useLocation();
     const { pathname } = location;
-
+    
     return (
         <AuthProvider>
             <NewsProvider>

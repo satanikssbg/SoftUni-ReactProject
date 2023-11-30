@@ -16,41 +16,6 @@ const Footer = () => {
             <div className="container">
                 <div className="row footerLinks">
                     <div className="col-12">
-                        <div className="socialIcons">
-                            <div>
-                                <a
-                                    href="https://www.facebook.com/portalsilistra"
-                                    title="Портал Силистра във Facebook"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <i className="fab fa-facebook-f" />
-                                </a>
-                            </div>
-                            <div>
-                                <a
-                                    href="https://www.instagram.com/portal_silistra/"
-                                    title="Портал Силистра в Instagram"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <i className="fab fa-instagram" />
-                                </a>
-                            </div>
-                            <div>
-                                <a
-                                    href="https://www.youtube.com/channel/UC_Kg0BhnfzWmVDzo_wwS0jw"
-                                    title="Портал Силистра в YouTube"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <i className="fab fa-youtube" />
-                                </a>
-                            </div>
-                        </div>
-
-                        <br />
-
                         <div className={`d-none d-sm-none d-md-block d-lg-block d-xl-block ${styles.footerLinks}`}>
                             <Link to="/" title="Портал Силистра">
                                 Начало

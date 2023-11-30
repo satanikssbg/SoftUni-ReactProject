@@ -3,3 +3,12 @@
     margin-right: 10px;
     padding-right: 10px;
 }
+
+footer {
+    position: fixed;
+    bottom: 0;
+}
+
+div#content {
+    margin-bottom: 200px !important;
+}
