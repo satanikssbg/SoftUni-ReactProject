@@ -25,12 +25,6 @@ const Read = () => {
             .catch(error => navigate('/news'));
     }, [id]);
 
-    console.log(isAuthenticated);
-    console.log(userRole);
-    console.log(article._ownerId);
-
-    console.log(isAuthenticated && userRole === "admin") || (isAuthenticated && userRole === "reporter" && article._ownerId === userId);
-
     if (loading) {
         return <Loading />
     }

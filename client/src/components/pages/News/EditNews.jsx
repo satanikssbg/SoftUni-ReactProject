@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import * as request from '../../../lib/request';
 import * as newsService from '../../../services/newsService';
@@ -20,25 +20,27 @@ const FormKeys = {
 
 const EditNews = () => {
     const { id } = useParams();
-    const { isAuthenticated, userRole } = useContext(AuthContext);
+    const { userRole, userId } = useContext(AuthContext);
     const { categories, regions } = useContext(NewsContext);
 
+    const [article, setArticle] = useState({});
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
     const editNewSubmitHandler = async (values) => {
 
-
     };
-
-    const [article, setArticle] = useState({});
 
     useEffect(() => {
         setLoading(true);
 
         newsService.getOne(id)
             .then(data => {
+                if (userRole === "reporter" && data._ownerId !== userId) {
+                    navigate(`/news/${id}`);
+                }
+
                 setArticle(data);
                 setLoading(false);
             })
@@ -75,7 +77,7 @@ const EditNews = () => {
     }, [article]);
 
     if (loading) {
-        return <Loading />
+        return <Loading />;
     }
 
     return (
