@@ -1,14 +1,22 @@
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
+import useForm from "../../../hooks/useForm";
+
+import NewsContext from "../../../contexts/newsContext";
+import AuthContext from "../../../contexts/authContext";
 
 import * as request from '../../../lib/request';
 import * as newsService from '../../../services/newsService';
-import { useContext, useEffect, useState } from "react";
-import useForm from "../../../hooks/useForm";
-import { removeKeysForForms } from "../../../utils/functionsUtils";
-import NewsContext from "../../../contexts/newsContext";
-import AuthContext from "../../../contexts/authContext";
+
 import addNewsValidate from "./addNewsValidate";
+
+import { removeKeysForForms } from "../../../utils/functionsUtils";
+
+import Path from "../../../paths";
+
 import Loading from "../../layouts/Loading";
+import { toast } from 'react-toastify';
 
 const FormKeys = {
     Title: 'title',
@@ -29,7 +37,27 @@ const EditNews = () => {
     const navigate = useNavigate();
 
     const editNewSubmitHandler = async (values) => {
+        setLoading(true);
 
+        try {
+            //const escapedTitle = encodeURIComponent(values.title);
+            const escapedTitle = JSON.stringify(values.title).slice(1, -1);
+            const checkForDuplicate = await request.get(`${Path.News}?select=_id,title&where=title%3D%22${escapedTitle}%22`);
+
+            const checkForDuplicateWitoutThis = checkForDuplicate.filter(item => item._id !== id);
+
+            if (checkForDuplicateWitoutThis.length === 0) {
+                await newsService.editNew(article._id, values);
+                toast.success('Новината е редактирана успешно.');
+                navigate(`/news/${article._id}`);
+            } else {
+                toast.error('Вече съществува новина с това заглавие.');
+            }
+        } catch (error) {
+            toast.error('Възникна грешка при създаването на новина.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {

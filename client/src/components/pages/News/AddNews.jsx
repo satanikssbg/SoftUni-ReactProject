@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import useForm from "../../../hooks/useForm";
 
@@ -11,6 +12,7 @@ import addNewsValidate from "./addNewsValidate";
 
 import Path from "../../../paths";
 
+import Loading from "../../layouts/Loading";
 import { toast } from 'react-toastify';
 
 const FormKeys = {
@@ -25,6 +27,8 @@ const AddNews = () => {
     const { categories, regions } = useContext(NewsContext);
     const [loading, setLoading] = useState(false);
 
+    const navigate = useNavigate();
+
     const addNewSubmitHandler = async (values) => {
         setLoading(true);
 
@@ -35,8 +39,11 @@ const AddNews = () => {
             const checkForDuplicate = await request.get(`${Path.News}?select=title&where=title%3D%22${escapedTitle}%22`);
 
             if (checkForDuplicate.length === 0) {
-                await newsService.createNew(values);
-                toast.success('Новината е добавена успешно.');
+                await newsService.createNew(values).then(res => {
+                    toast.success('Новината е добавена успешно.');
+                    navigate(`/news/${res._id}`);
+                });
+
             } else {
                 toast.error('Вече съществува новина с това заглавие.');
             }
@@ -54,6 +61,10 @@ const AddNews = () => {
         [FormKeys.Article]: '',
         [FormKeys.Img]: '',
     }, addNewsValidate);
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <>
