@@ -33,6 +33,8 @@ const Read = () => {
         <>
             {article.title}
             <hr />
+            <img src={article.img} alt={article.title} />
+            {console.log(article)}
 
             {
                 (isAuthenticated && ((userRole === "admin") || (userRole === "reporter" && article._ownerId === userId))) && (

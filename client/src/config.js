@@ -7,6 +7,8 @@ const API_URL = 'http://localhost:3030';
 const PER_PAGE = Number(10);
 
 const ALLOWED_IMAGE_EXT = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+const IMAGES_WIDTH = 795;
+const IMAGES_HEIGHT = 447;
 
 const INITIALIZE_FIREBASE = initializeApp({
     apiKey: 'AIzaSyDVCyjbX7hSP4-zOrH-gWH-aH2MqCTQv4o',
@@ -24,5 +26,7 @@ export {
     API_URL,
     PER_PAGE,
     ALLOWED_IMAGE_EXT,
-    FIREBASE_STORAGE
+    FIREBASE_STORAGE,
+    IMAGES_WIDTH,
+    IMAGES_HEIGHT
 };

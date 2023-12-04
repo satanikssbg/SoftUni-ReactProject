@@ -14,6 +14,7 @@ import Path from "../../../paths";
 
 import Loading from "../../layouts/Loading";
 import { toast } from 'react-toastify';
+import upload from "../../../lib/upload";
 
 const FormKeys = {
     Title: 'title',
@@ -33,22 +34,34 @@ const AddNews = () => {
         setLoading(true);
 
         try {
-            //const escapedTitle = encodeURIComponent(values.title);
             const escapedTitle = JSON.stringify(values.title).slice(1, -1);
 
             const checkForDuplicate = await request.get(`${Path.News}?select=title&where=title%3D%22${escapedTitle}%22`);
 
             if (checkForDuplicate.length === 0) {
-                await newsService.createNew(values).then(res => {
-                    toast.success('Новината е добавена успешно.');
-                    navigate(`/news/${res._id}`);
-                });
+                const imgFile = values[`${FormKeys.Img}_file`];
 
+                try {
+                    const url = await upload(imgFile);
+
+                    try {
+                        const res = await newsService.createNew(values, url);
+                        toast.success('Новината е добавена успешно.');
+                        navigate(`/news/${res._id}`);
+                    } catch (error) {
+                        console.error('Грешка при създаване на новина:', error);
+                        toast.error('Грешка при създаване на новина. Моля, опитайте отново.');
+                    }
+                } catch (error) {
+                    console.error('Грешка при качване на снимка:', error);
+                    toast.error('Грешка при качване на снимка. Моля, опитайте отново.');
+                }
             } else {
                 toast.error('Вече съществува новина с това заглавие.');
             }
         } catch (error) {
-            toast.error('Възникна грешка при създаването на новина.');
+            console.log(error);
+            toast.error('Възникна грешка при създаването на новина. Моля, опитайте отново.');
         } finally {
             setLoading(false);
         }
@@ -65,7 +78,7 @@ const AddNews = () => {
     */
 
     const { values, errors, onChange, onSubmit } = useForm(addNewSubmitHandler, {
-        [FormKeys.Title]: 'qweqwewqeqwe',
+        [FormKeys.Title]: `qweqwewqeqwe44 ${new Date().getTime()}`,
         [FormKeys.Category]: '1',
         [FormKeys.Region]: '1',
         [FormKeys.Article]: 'qweqwewqeqwe qweqwewqeqwe qweqwewqeqwe qweqwewqeqwe qweqwewqeqwe',
@@ -184,14 +197,14 @@ const AddNews = () => {
                             </div>
 
                             <div className="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <label htmlforfor={FormKeys.Img}>
-                                    <strong>Съдържание</strong> <span className="redText">*</span>
+                                <label htmlFor={FormKeys.Img}>
+                                    <strong>Снимка</strong> <span className="redText">*</span>
                                 </label>
                                 <div className="custom-file">
                                     <input
                                         id={FormKeys.Img}
                                         name={FormKeys.Img}
-                                        value={values[FormKeys.Img]}
+                                        value={''}
                                         onChange={onChange}
                                         type="file"
                                         className={`form-control custom-file-input ${errors[FormKeys.Img] && 'is-invalid'}`}

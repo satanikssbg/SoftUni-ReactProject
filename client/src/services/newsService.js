@@ -3,13 +3,13 @@ import * as request from '../lib/request';
 
 import Path from '../paths';
 
-export const createNew = async ({ title, category, region, article, img }) => {
+export const createNew = async ({ title, category, region, article }, img_url) => {
     const result = await request.post(Path.News, {
         title,
         category,
         region,
         article,
-        img
+        img: img_url
     });
 
     return result;
