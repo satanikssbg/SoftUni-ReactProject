@@ -1,36 +1,28 @@
-import { FIREBASE_STORAGE, PER_PAGE } from '../config';
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { PER_PAGE } from '../config';
 import * as request from '../lib/request';
 
 import Path from '../paths';
 
-export const createNew = async ({ title, category, region, article, img, img_file }) => {
-    let imageUrl = '';
-    const timestamp = currentDate.getTime();
-
-    const storageRef = ref(FIREBASE_STORAGE, `/images/${timestamp}.jpg`);
-    const uploadImage = uploadBytesResumable(storageRef, img_file);
-
-    uploadImage.on(
-        "state_changed",
-        (snapshot) => {
-            console.log(snapshot)
-        },
-        (err) => console.log(err),
-        () => {
-            getDownloadURL(uploadImage.snapshot.ref).then((url) => {
-                imageUrl = url;
-            });
-        }
-    );
-
+export const createNew = async ({ title, category, region, article, img }) => {
     const result = await request.post(Path.News, {
         title,
         category,
         region,
         article,
-        imageUrl
-    }).then(res => res.json());
+        img
+    });
+
+    return result;
+}
+
+export const editNew = async (id, { title, category, region, article, img }) => {
+    const result = await request.put(`${Path.News}/${id}`, {
+        title,
+        category,
+        region,
+        article,
+        img
+    });
 
     return result;
 }
@@ -38,6 +30,20 @@ export const createNew = async ({ title, category, region, article, img, img_fil
 export const allNews = async () => {
     //TODO
 }
+
+export const getOne = async (id) => {
+    const query = new URLSearchParams({
+        load: [
+            'region=region:regions',
+            'category=category:categories'
+        ]
+    });
+
+    const result = await request.get(`${Path.News}/${id}?${query}`);
+
+    return result;
+}
+
 
 export const newsPaginate = async (page, type = "ALL", categoryId = null) => {
     let OFFSET = (page - 1) * PER_PAGE;

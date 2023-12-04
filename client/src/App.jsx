@@ -48,14 +48,13 @@ function App() {
                         <Route path="/news/category/:slug" element={<News />} />
                         <Route path="/news/region/:region" element={<News />} />
                         <Route path="/news/:id" element={<Read />} />
-                        <Route path="/news/edit/:id" element={<EditNews />} />
 
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/register" element={<RegisterPage />} />
 
-
                         <Route element={<AuthGuard />}>
                             <Route path="/news/add" element={<AddNews />} />
+                            <Route path="/news/edit/:id" element={<EditNews />} />
                             <Route path="/logout" element={<LogoutPage />} />
                         </Route>
 

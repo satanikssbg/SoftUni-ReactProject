@@ -1,9 +1,9 @@
-import { useContext, useEffect } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useForm from "../../../hooks/useForm";
 
-import AuthContext from "../../../contexts/authContext";
+import NewsContext from "../../../contexts/newsContext";
 
 import * as request from '../../../lib/request';
 import * as newsService from '../../../services/newsService';
@@ -12,8 +12,8 @@ import addNewsValidate from "./addNewsValidate";
 
 import Path from "../../../paths";
 
+import Loading from "../../layouts/Loading";
 import { toast } from 'react-toastify';
-import NewsContext from "../../../contexts/newsContext";
 
 const FormKeys = {
     Title: 'title',
@@ -25,19 +25,32 @@ const FormKeys = {
 
 const AddNews = () => {
     const { categories, regions } = useContext(NewsContext);
+    const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate();
 
     const addNewSubmitHandler = async (values) => {
-        const escapedTitle = JSON.stringify(values.title).slice(1, -1);
-        const checkForDublicate = await request.get(`${Path.News}?select=title&where=title%20LIKE%20%22${escapedTitle}%22`);
+        setLoading(true);
 
-        if (checkForDublicate.length === 0) {
-            const result = await newsService.createNew(values);
+        try {
+            //const escapedTitle = encodeURIComponent(values.title);
+            const escapedTitle = JSON.stringify(values.title).slice(1, -1);
 
-            if (result && result._id) {
-                toast.success('Новината е добавена успешно.');
+            const checkForDuplicate = await request.get(`${Path.News}?select=title&where=title%3D%22${escapedTitle}%22`);
+
+            if (checkForDuplicate.length === 0) {
+                await newsService.createNew(values).then(res => {
+                    toast.success('Новината е добавена успешно.');
+                    navigate(`/news/${res._id}`);
+                });
+
+            } else {
+                toast.error('Вече съществува новина с това заглавие.');
             }
-        } else {
-            toast.error('Вече съществува новина с това заглавие.');
+        } catch (error) {
+            toast.error('Възникна грешка при създаването на новина.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -58,6 +71,10 @@ const AddNews = () => {
         [FormKeys.Article]: 'qweqwewqeqwe qweqwewqeqwe qweqwewqeqwe qweqwewqeqwe qweqwewqeqwe',
         [FormKeys.Img]: '',
     }, addNewsValidate);
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <>

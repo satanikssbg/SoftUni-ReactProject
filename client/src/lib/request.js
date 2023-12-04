@@ -19,7 +19,7 @@ const buildOptions = (data) => {
             'X-Authorization': token,
         };
 
-        if (role === "admin" || role === "reporter") {
+        if (role === "admin") {
             options.headers = {
                 ...options.headers,
                 'X-Admin': '',
