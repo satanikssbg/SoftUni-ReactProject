@@ -6,6 +6,7 @@ import useForm from "../../../hooks/useForm";
 import NewsContext from "../../../contexts/newsContext";
 
 import * as request from '../../../lib/request';
+import upload from "../../../lib/upload";
 import * as newsService from '../../../services/newsService';
 
 import addNewsValidate from "./addNewsValidate";
@@ -13,8 +14,8 @@ import addNewsValidate from "./addNewsValidate";
 import Path from "../../../paths";
 
 import Loading from "../../layouts/Loading";
+
 import { toast } from 'react-toastify';
-import upload from "../../../lib/upload";
 
 const FormKeys = {
     Title: 'title',
@@ -42,10 +43,10 @@ const AddNews = () => {
                 const imgFile = values[`${FormKeys.Img}_file`];
 
                 try {
-                    const url = await upload(imgFile);
+                    const imgUrl = await upload(imgFile);
 
                     try {
-                        const res = await newsService.createNew(values, url);
+                        const res = await newsService.createNew(values, imgUrl);
                         toast.success('Новината е добавена успешно.');
                         navigate(`/news/${res._id}`);
                     } catch (error) {
