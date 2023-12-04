@@ -1,15 +1,35 @@
-import { PER_PAGE } from '../config';
+import { FIREBASE_STORAGE, PER_PAGE } from '../config';
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import * as request from '../lib/request';
 
 import Path from '../paths';
 
-export const createNew = async ({ title, category, region, article, img }) => {
+export const createNew = async ({ title, category, region, article, img, img_file }) => {
+    let imageUrl = '';
+    const timestamp = currentDate.getTime();
+
+    const storageRef = ref(FIREBASE_STORAGE, `/images/${timestamp}.jpg`);
+    const uploadImage = uploadBytesResumable(storageRef, img_file);
+
+    uploadImage.on(
+        "state_changed",
+        (snapshot) => {
+            console.log(snapshot)
+        },
+        (err) => console.log(err),
+        () => {
+            getDownloadURL(uploadImage.snapshot.ref).then((url) => {
+                imageUrl = url;
+            });
+        }
+    );
+
     const result = await request.post(Path.News, {
         title,
         category,
         region,
         article,
-        img
+        imageUrl
     }).then(res => res.json());
 
     return result;

@@ -22,6 +22,11 @@ const useForm = (submitHandler, initialValues, validation) => {
         let name = e.target.name;
         let value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
 
+        if (e.target.type === "file" && document.querySelector(`#${name}_fileName`)) {
+            let file = document.querySelector(`#${name}`).files[0];
+            document.querySelector(`#${name}_fileName`).innerHTML = file.name;
+        }
+
         setValues((state) => {
             const newState = {
                 ...state,
@@ -31,6 +36,10 @@ const useForm = (submitHandler, initialValues, validation) => {
             if (validation) {
                 const newErrors = validation(errors, name, value, newState);
                 setErrors(newErrors);
+            }
+
+            if (e.target.type === "file") {
+                newState[`${name}_file`] = e.target.files[0];
             }
 
             return newState;

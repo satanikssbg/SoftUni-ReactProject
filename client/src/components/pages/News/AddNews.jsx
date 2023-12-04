@@ -41,11 +41,21 @@ const AddNews = () => {
         }
     };
 
+    /*
     const { values, errors, onChange, onSubmit } = useForm(addNewSubmitHandler, {
         [FormKeys.Title]: '',
         [FormKeys.Category]: '',
         [FormKeys.Region]: '',
         [FormKeys.Article]: '',
+        [FormKeys.Img]: '',
+    }, addNewsValidate);
+    */
+
+    const { values, errors, onChange, onSubmit } = useForm(addNewSubmitHandler, {
+        [FormKeys.Title]: 'qweqwewqeqwe',
+        [FormKeys.Category]: '1',
+        [FormKeys.Region]: '1',
+        [FormKeys.Article]: 'qweqwewqeqwe qweqwewqeqwe qweqwewqeqwe qweqwewqeqwe qweqwewqeqwe',
         [FormKeys.Img]: '',
     }, addNewsValidate);
 
@@ -158,20 +168,24 @@ const AddNews = () => {
 
                             <div className="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <label htmlforfor={FormKeys.Img}>
-                                    <strong>Снимка</strong>
+                                    <strong>Съдържание</strong> <span className="redText">*</span>
                                 </label>
-                                <input
-                                    id={FormKeys.Img}
-                                    name={FormKeys.Img}
-                                    value={values[FormKeys.Img]}
-                                    onChange={onChange}
-                                    placeholder="Поставете линк към снимка"
-                                    maxLength={255}
-                                    type="text"
-                                    className={`form-control ${errors[FormKeys.Img] && 'is-invalid'}`}
-                                />
+                                <div className="custom-file">
+                                    <input
+                                        id={FormKeys.Img}
+                                        name={FormKeys.Img}
+                                        value={values[FormKeys.Img]}
+                                        onChange={onChange}
+                                        type="file"
+                                        className={`form-control custom-file-input ${errors[FormKeys.Img] && 'is-invalid'}`}
+                                        accept=".jpg, .jpeg, .png, .webp, .gif"
+                                    />
+                                    <label className="custom-file-label" id={`${FormKeys.Img}_fileName`}>
+                                        Изберете файл
+                                    </label>
+                                </div>
                                 {
-                                    errors[FormKeys.Img] && <div className="invalid-feedback">{errors[FormKeys.Img]}</div>
+                                    errors[FormKeys.Img] && <div className="invalid-feedback" style={{ display: "inline-block" }}>{errors[FormKeys.Img]}</div>
                                 }
                             </div>
 

@@ -1,4 +1,5 @@
 import { omit } from 'lodash';
+import { ALLOWED_IMAGE_EXT } from '../../../config';
 
 const addNewsValidate = (errors, name, value, values = {}) => {
     switch (name) {
@@ -61,10 +62,18 @@ const addNewsValidate = (errors, name, value, values = {}) => {
             break;
 
         case 'img':
-            if (value.length !== 0 && !new RegExp(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g).test(value)) {
+            let fileExtension = value.split('.').pop().toLowerCase();
+
+            if (value.length <= 0) {
                 return {
                     ...errors,
-                    [name]: 'Трябва да въведете валиден линк',
+                    [name]: 'Не сте избрали снимка.',
+                };
+            }
+            else if (!ALLOWED_IMAGE_EXT.includes(fileExtension)) {
+                return {
+                    ...errors,
+                    [name]: `Файла, който се опитвате да качите, не е позволен. (Позволени разширения: ${ALLOWED_IMAGE_EXT.join(', ')})`,
                 };
             } else {
                 let newObj = omit(errors, [name]);
@@ -73,7 +82,8 @@ const addNewsValidate = (errors, name, value, values = {}) => {
             break;
 
         default:
-
+            let newObj = omit(errors, [name]);
+            return newObj;
             break;
     }
 };
