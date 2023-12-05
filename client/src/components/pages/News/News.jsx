@@ -7,7 +7,7 @@ import * as newsService from '../../../services/newsService';
 
 import PaginateLinks from '../../layouts/PaginateLinks';
 import NewsList from './NewsList';
-import Sidebar from '../../layouts/Sidebar';
+import withSidebar from '../../../HOC/withSidebar';
 
 const News = () => {
     const [pageTitle, setPageTitle] = useState('Новини');
@@ -105,45 +105,35 @@ const News = () => {
     };
 
     return (
-        <>
-            <div id="content" className="container" style={{ marginTop: 20 }}>
-                <div className="row">
-                    <div className="contentWrap row col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                        <div className="row">
-                            <div className="obshtinaHeading">
-                                <div className="headingLine" />
-                                <div className="headingText">
-                                    {pageTitle} ({Number(totalNews)})
-                                </div>
-                            </div>
-
-                            <div id="load-data">
-                                {
-                                    news.length > 0 && news.map(article =>
-                                        <NewsList key={article._id} {...article} />
-                                    )
-                                }
-
-                                {totalPages > 1 && (
-                                    <>
-                                        <PaginateLinks
-                                            currentPage={currentPage}
-                                            lastPage={totalPages}
-                                            paginateLink={paginateLink}
-                                            type={NewsType}
-                                            slug={checkParam}
-                                        />
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <Sidebar />
+        <div className="row">
+            <div className="obshtinaHeading">
+                <div className="headingLine" />
+                <div className="headingText">
+                    {pageTitle} ({Number(totalNews)})
                 </div>
             </div>
-        </>
+
+            <div id="load-data">
+                {
+                    news.length > 0 && news.map(article =>
+                        <NewsList key={article._id} {...article} />
+                    )
+                }
+
+                {totalPages > 1 && (
+                    <>
+                        <PaginateLinks
+                            currentPage={currentPage}
+                            lastPage={totalPages}
+                            paginateLink={paginateLink}
+                            type={NewsType}
+                            slug={checkParam}
+                        />
+                    </>
+                )}
+            </div>
+        </div>
     );
 };
 
-export default News;
+export default withSidebar(News);
