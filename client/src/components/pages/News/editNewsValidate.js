@@ -30,9 +30,7 @@ const addNewsValidate = (errors, name, value, values = {}) => {
 
         case 'img':
             const fileExtension = value.split('.').pop().toLowerCase();
-            if (value.length <= 0) {
-                return { ...errors, [name]: 'Не сте избрали снимка.' };
-            } else if (!ALLOWED_IMAGE_EXT.includes(fileExtension)) {
+            if (value.length > 0 && !ALLOWED_IMAGE_EXT.includes(fileExtension)) {
                 return {
                     ...errors,
                     [name]: `Файла, който се опитвате да качите, не е позволен. (Позволени разширения: ${ALLOWED_IMAGE_EXT.join(', ')})`,

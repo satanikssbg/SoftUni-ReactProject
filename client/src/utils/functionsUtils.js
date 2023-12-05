@@ -33,3 +33,15 @@ export const formatDateString = (inputDate) => {
 export const removeKeysForForms = (keys) => {
     return Object.keys(keys).filter(key => !key.startsWith('_'));
 }
+
+export const omit = (obj, keysToOmit) => {
+    const result = {};
+
+    for (const key in obj) {
+        if (!keysToOmit.includes(key)) {
+            result[key] = obj[key];
+        }
+    }
+
+    return result;
+};

@@ -3,9 +3,8 @@ import { ref, uploadString, getDownloadURL } from "firebase/storage";
 
 const upload = async (file) => {
     let fileName = new Date().getTime();
-    let fileExtension = file.name.split('.').pop().toLowerCase();
 
-    const storageRef = ref(FIREBASE_STORAGE, `/images/${fileName}.${fileExtension}`);
+    const storageRef = ref(FIREBASE_STORAGE, `/images/${fileName}.jpg`);
 
     const targetWidth = IMAGES_WIDTH;
     const targetHeight = IMAGES_HEIGHT;
@@ -24,6 +23,7 @@ const upload = async (file) => {
                 let newWidth, newHeight;
                 const aspectRatio = img.width / img.height;
 
+                /*
                 if (img.width > img.height) {
                     newWidth = targetWidth;
                     newHeight = targetWidth / aspectRatio;
@@ -33,6 +33,13 @@ const upload = async (file) => {
                 }
 
                 const xOffset = (newWidth - targetWidth) / 2;
+                const yOffset = (newHeight - targetHeight) / 2;
+                */
+
+                newWidth = targetWidth;
+                newHeight = targetWidth / aspectRatio;
+
+                const xOffset = 0;
                 const yOffset = (newHeight - targetHeight) / 2;
 
                 canvas.width = targetWidth;
@@ -49,7 +56,7 @@ const upload = async (file) => {
     });
 
     try {
-        const snapshot = await uploadString(storageRef, dataURL, 'data_url');
+        const snapshot = await uploadString(storageRef, dataURL, 'data_url', { contentType: 'image/jpeg' });
 
         const url = await getDownloadURL(snapshot.ref);
 

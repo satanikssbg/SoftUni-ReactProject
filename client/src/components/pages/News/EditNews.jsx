@@ -7,9 +7,10 @@ import NewsContext from "../../../contexts/newsContext";
 import AuthContext from "../../../contexts/authContext";
 
 import * as request from '../../../lib/request';
+import upload from "../../../lib/upload";
 import * as newsService from '../../../services/newsService';
 
-import addNewsValidate from "./addNewsValidate";
+import editNewsValidate from "./editNewsValidate";
 
 import { removeKeysForForms } from "../../../utils/functionsUtils";
 
@@ -47,9 +48,26 @@ const EditNews = () => {
             const checkForDuplicateWitoutThis = checkForDuplicate.filter(item => item._id !== id);
 
             if (checkForDuplicateWitoutThis.length === 0) {
-                await newsService.editNew(article._id, values);
-                toast.success('Новината е редактирана успешно.');
-                navigate(`/news/${article._id}`);
+                const imgFile = values[`${FormKeys.Img}_file`];
+                let imgUrl = article.img;
+
+                try {
+                    if (imgFile) {
+                        imgUrl = await upload(imgFile);
+                    }
+
+                    await newsService.editNew(article._id, values, imgUrl);
+                    toast.success('Новината е редактирана успешно.');
+                    navigate(`/news/${article._id}`);
+                } catch (error) {
+                    if (imgFile) {
+                        console.error('Грешка при качване на снимка:', error);
+                        toast.error('Грешка при качване на снимка. Моля, опитайте отново.');
+                    } else {
+                        console.error('Грешка при редактиране на новина:', error);
+                        toast.error('Грешка при редактиране на новина. Моля, опитайте отново.');
+                    }
+                }
             } else {
                 toast.error('Вече съществува новина с това заглавие.');
             }
@@ -81,7 +99,7 @@ const EditNews = () => {
         [FormKeys.Region]: '',
         [FormKeys.Article]: '',
         [FormKeys.Img]: '',
-    }, addNewsValidate);
+    }, editNewsValidate);
 
     const testEdit = () => {
         request.patch(`http://localhost:3030/data/news/${id}`, { title: 'proba1' }).then(res => console.log(res));
@@ -92,14 +110,16 @@ const EditNews = () => {
             const formDefaultKeys = removeKeysForForms(article);
 
             formDefaultKeys.map(key => {
-                const changeInitialValue = {
-                    target: {
-                        name: `${key}`,
-                        value: key === 'category' || key === 'region' ? article[key]._id : article[key],
-                    }
-                };
+                if (key !== 'img') {
+                    const changeInitialValue = {
+                        target: {
+                            name: `${key}`,
+                            value: key === 'category' || key === 'region' ? article[key]._id : article[key],
+                        }
+                    };
 
-                onChange(changeInitialValue);
+                    onChange(changeInitialValue);
+                }
             });
         }
     }, [article]);
@@ -218,21 +238,25 @@ const EditNews = () => {
                             </div>
 
                             <div className="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <label htmlforfor={FormKeys.Img}>
+                                <label htmlFor={FormKeys.Img}>
                                     <strong>Снимка</strong>
                                 </label>
-                                <input
-                                    id={FormKeys.Img}
-                                    name={FormKeys.Img}
-                                    value={values[FormKeys.Img]}
-                                    onChange={onChange}
-                                    placeholder="Поставете линк към снимка"
-                                    maxLength={255}
-                                    type="text"
-                                    className={`form-control ${errors[FormKeys.Img] && 'is-invalid'}`}
-                                />
+                                <div className="custom-file">
+                                    <input
+                                        id={FormKeys.Img}
+                                        name={FormKeys.Img}
+                                        value={''}
+                                        onChange={onChange}
+                                        type="file"
+                                        className={`form-control custom-file-input ${errors[FormKeys.Img] && 'is-invalid'}`}
+                                        accept=".jpg, .jpeg, .png, .webp, .gif"
+                                    />
+                                    <label className="custom-file-label" id={`${FormKeys.Img}_fileName`}>
+                                        Изберете файл
+                                    </label>
+                                </div>
                                 {
-                                    errors[FormKeys.Img] && <div className="invalid-feedback">{errors[FormKeys.Img]}</div>
+                                    errors[FormKeys.Img] && <div className="invalid-feedback" style={{ display: "inline-block" }}>{errors[FormKeys.Img]}</div>
                                 }
                             </div>
 

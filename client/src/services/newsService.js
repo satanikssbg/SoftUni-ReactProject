@@ -15,13 +15,13 @@ export const createNew = async ({ title, category, region, article }, img_url) =
     return result;
 }
 
-export const editNew = async (id, { title, category, region, article, img }) => {
+export const editNew = async (id, { title, category, region, article }, img_url) => {
     const result = await request.put(`${Path.News}/${id}`, {
         title,
         category,
         region,
         article,
-        img
+        img: img_url
     });
 
     return result;
