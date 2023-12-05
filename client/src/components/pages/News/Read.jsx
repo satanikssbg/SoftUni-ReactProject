@@ -1,10 +1,11 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../../../contexts/authContext";
 import * as newsService from '../../../services/newsService';
 import Loading from "../../layouts/Loading";
 import { formatDateString } from "../../../utils/functionsUtils";
 import ConfirmModal from "../../layouts/ConfirmModal";
+import { toast } from 'react-toastify';
 
 const Read = () => {
     const { id } = useParams();
@@ -23,11 +24,17 @@ const Read = () => {
         newsService.getOne(id)
             .then(data => {
                 setArticle(data);
-                console.log(data.article)
-
             })
-            .catch(error => navigate('/news'))
-            .finally(setLoading(false));
+            .catch(() => {
+                navigate('/news');
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+
+        return () => {
+            setArticle({});
+        };
     }, [id]);
 
     const TextWithLineBreaks = (article) => {
@@ -52,12 +59,27 @@ const Read = () => {
 
     const deteleNewsHandler = () => {
         setShowConfirmModal(false);
-        console.log('click');
+        setLoading(true);
+
+        newsService.deleteNew(article._id)
+            .then(() => {
+                toast.success('Новината е изтрира успешно.');
+                navigate('/news');
+            })
+            .catch(error => {
+                console.error('Грешка при изтриване на новина:', error);
+                toast.error('Грешка при изтриване на новина. Моля опитайте отново.');
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     }
 
     if (loading) {
         return <Loading />;
     }
+
+    console.log(article)
 
     return (
         <>
@@ -87,6 +109,20 @@ const Read = () => {
                                                     />
                                                 }
                                             </div>
+
+                                            <div className="btn-group btn-group-sm mr-2">
+                                                <button className="btn btn-secondary">
+                                                    <i className="fa fa-user"></i> Добавил: {article.author?.username}
+                                                </button>
+                                            </div>
+
+                                            {article._updatedOn && (
+                                                <div className="btn-group btn-group-sm mr-2">
+                                                    <button className="btn btn-secondary">
+                                                        <i className="fa fa-clock-o"></i> Последна редакция: {formatDateString(article._updatedOn, true)}
+                                                    </button>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

@@ -27,6 +27,13 @@ export const editNew = async (id, { title, category, region, article }, img_url)
     return result;
 }
 
+export const deleteNew = async (id) => {
+    const result = await request.remove(`${Path.News}/${id}`);
+
+    return result;
+}
+
+
 export const allNews = async () => {
     //TODO
 }
@@ -35,7 +42,8 @@ export const getOne = async (id) => {
     const query = new URLSearchParams({
         load: [
             'region=region:regions',
-            'category=category:categories'
+            'category=category:categories',
+            'author=_ownerId:users'
         ]
     });
 

@@ -22,9 +22,19 @@ export const stringLimiter = (string, maxLength) => {
     }
 };
 
-export const formatDateString = (inputDate) => {
+export const formatDateString = (inputDate, shortFormat = false) => {
     const date = new Date(Number(inputDate));
-    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+
+    let options = { day: 'numeric', month: 'long', year: 'numeric' };
+
+    if (shortFormat) {
+        options = {
+            ...options,
+            hour: 'numeric',
+            minute: 'numeric'
+        }
+    }
+
     const formattedDate = date.toLocaleDateString('bg-BG', options);
 
     return formattedDate;
