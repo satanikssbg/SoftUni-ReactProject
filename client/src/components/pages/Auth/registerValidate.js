@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import { validationCommon } from "../../../utils/functionsUtils";
 
 const registerValidate = (errors, name, value, values = {}) => {
     switch (name) {
@@ -13,11 +13,8 @@ const registerValidate = (errors, name, value, values = {}) => {
                     ...errors,
                     [name]: 'Трябва да въведете минимум 3 символа за потребителко име.',
                 };
-            } else {
-                let newObj = omit(errors, [name]);
-                return newObj;
             }
-            break;
+            return validationCommon(errors, name);
 
         case 'email':
             if (value.length <= 0) {
@@ -36,11 +33,8 @@ const registerValidate = (errors, name, value, values = {}) => {
                     ...errors,
                     [name]: 'Невалиден формат на E-mail.',
                 };
-            } else {
-                let newObj = omit(errors, [name]);
-                return newObj;
             }
-            break;
+            return validationCommon(errors, name);
 
         case 'password':
             if (value.length <= 0) {
@@ -53,11 +47,8 @@ const registerValidate = (errors, name, value, values = {}) => {
                     ...errors,
                     [name]: 'Трябва да въведете минимум 6 символа за парола.',
                 };
-            } else {
-                let newObj = omit(errors, [name]);
-                return newObj;
             }
-            break;
+            return validationCommon(errors, name);
 
         case 'repassword':
             if (value.length <= 0) {
@@ -75,11 +66,8 @@ const registerValidate = (errors, name, value, values = {}) => {
                     ...errors,
                     [name]: 'Двете пароли несъвпадат.',
                 };
-            } else {
-                let newObj = omit(errors, [name]);
-                return newObj;
             }
-            break;
+            return validationCommon(errors, name);
 
         case 'termsAgreement':
             if (value !== true) {
@@ -87,15 +75,11 @@ const registerValidate = (errors, name, value, values = {}) => {
                     ...errors,
                     [name]: 'Не сте приели Общите условия.',
                 };
-            } else {
-                let newObj = omit(errors, [name]);
-                return newObj;
             }
-            break;
+            return validationCommon(errors, name);
 
         default:
-
-            break;
+            return validationCommon(errors, name);
     }
 };
 

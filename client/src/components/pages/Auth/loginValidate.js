@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import { validationCommon } from "../../../utils/functionsUtils";
 
 const loginValidate = (errors, name, value, values = {}) => {
     switch (name) {
@@ -19,11 +19,8 @@ const loginValidate = (errors, name, value, values = {}) => {
                     ...errors,
                     [name]: 'Невалиден формат на E-mail.',
                 };
-            } else {
-                let newObj = omit(errors, [name]);
-                return newObj;
             }
-            break;
+            return validationCommon(errors, name);
 
         case 'password':
             if (value.length <= 0) {
@@ -36,16 +33,12 @@ const loginValidate = (errors, name, value, values = {}) => {
                     ...errors,
                     [name]: 'Трябва да въведете минимум 6 символа за парола.',
                 };
-            } else {
-                let newObj = omit(errors, [name]);
-                return newObj;
             }
-            break;
+            return validationCommon(errors, name);
 
 
         default:
-
-            break;
+            return commonValidation(errors, name);
     }
 };
 

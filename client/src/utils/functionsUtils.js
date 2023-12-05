@@ -34,7 +34,7 @@ export const removeKeysForForms = (keys) => {
     return Object.keys(keys).filter(key => !key.startsWith('_'));
 }
 
-export const omit = (obj, keysToOmit) => {
+export const validationOmit = (obj, keysToOmit) => {
     const result = {};
 
     for (const key in obj) {
@@ -45,3 +45,5 @@ export const omit = (obj, keysToOmit) => {
 
     return result;
 };
+
+export const validationCommon = (errors, name) => validationOmit(errors, [name]);
