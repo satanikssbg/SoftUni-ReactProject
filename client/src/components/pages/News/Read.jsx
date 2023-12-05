@@ -211,6 +211,11 @@ const Read = () => {
                         <TextWithLineBreaks article={article.article} />
                     </div>
                 </div>
+                <div style={{ width: '100%' }}>
+                    <span className="articleLabel">
+                        <i className="fa fa-user"></i> Автор: {article.author?.username}
+                    </span>
+                </div>
             </div>
 
 
@@ -219,23 +224,30 @@ const Read = () => {
                     <div className="headingLine"></div>
                     <div className="headingText">Коментари</div>
                 </div>
-
-
             </div>
 
             <div className="row">
                 <div className="adsFilters row col-12">
                     <div className="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <ul className="list-unstyled">
-                            {comments.map(comment =>
-                                <CommentsList
-                                    key={comment._id}
-                                    {...comment}
-                                    onEdit={commentEditClickHandler}
-                                    onDelete={commentDeleteClickHandler}
-                                />
-                            )}
-                        </ul>
+                        {comments.length > 0
+                            ? (
+                                <ul className="list-unstyled">
+                                    {comments.map(comment =>
+                                        <CommentsList
+                                            key={comment._id}
+                                            {...comment}
+                                            onEdit={commentEditClickHandler}
+                                            onDelete={commentDeleteClickHandler}
+                                        />
+                                    )}
+                                </ul>
+                            )
+                            : (
+                                <div className="alert alert-info text-center">
+                                    Тази новина все още няма добавени коментари. Ти можеш да бъдеш първият!
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
 
@@ -267,10 +279,9 @@ const Read = () => {
                             </form>
                         )
                         : (
-
-                            <div className="readNews col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div className="alert alert-danger">
-                                    Желаете да добавите коментар? Моля, <Link to='/login' title='Вход'>влезте</Link> в своя акаунт или се <Link to='/register' title='Регистрация'>регистрирайте</Link>.
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div className="alert alert-danger text-center">
+                                    Желаеш да добавиш коментар? Моля, <Link to='/login' title='Вход'>влез</Link> в своя акаунт или се <Link to='/register' title='Регистрация'>регистрирай</Link>.
                                 </div>
                             </div>
                         )
