@@ -61,7 +61,8 @@ export const AuthProvider = ({
         logoutHandler,
         isAuthenticated: !!auth.accessToken,
         userRole: !!auth.accessToken ? auth.role : false,
-        userId: !!auth.accessToken ? auth._id : false
+        userId: !!auth.accessToken ? auth._id : false,
+        username: !!auth.accessToken ? auth.username : false,
     };
 
     return (

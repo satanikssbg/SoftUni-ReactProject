@@ -7,6 +7,7 @@ const Path = {
     GetCategories: `${API_URL}/data/categories`,
     GetRegions: `${API_URL}/data/regions`,
     News: `${API_URL}/data/news`,
+    Comments: `${API_URL}/data/comments`,
 };
 
 export default Path;

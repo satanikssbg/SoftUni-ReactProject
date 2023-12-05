@@ -1,16 +1,25 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../../../contexts/authContext";
 import * as newsService from '../../../services/newsService';
+import * as commentsService from '../../../services/commentsService';
 import Loading from "../../layouts/Loading";
 import { formatDateString } from "../../../utils/functionsUtils";
 import ConfirmModal from "../../layouts/ConfirmModal";
 import { toast } from 'react-toastify';
 import withSidebar from "../../../HOC/withSidebar";
+import addCommentsValidate from "./addCommentsValidate";
+import useForm from "../../../hooks/useForm";
+import commentsReducer from "./commentsReducer";
+import CommentsList from "./CommentsList";
+
+const CommentFormKeys = {
+    Comment: 'comment',
+};
 
 const Read = () => {
     const { id } = useParams();
-    const { isAuthenticated, userRole, userId } = useContext(AuthContext);
+    const { isAuthenticated, userRole, userId, username } = useContext(AuthContext);
 
     const [loading, setLoading] = useState(false);
 
@@ -18,6 +27,8 @@ const Read = () => {
 
     const [article, setArticle] = useState({});
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+    const [comments, dispatch] = useReducer(commentsReducer, []);
 
     useEffect(() => {
         setLoading(true);
@@ -31,6 +42,14 @@ const Read = () => {
             })
             .finally(() => {
                 setLoading(false);
+            });
+
+        commentsService.getAll(id)
+            .then((result) => {
+                dispatch({
+                    type: 'GET_ALL_COMMENTS',
+                    payload: result,
+                });
             });
 
         return () => {
@@ -74,6 +93,38 @@ const Read = () => {
             .finally(() => {
                 setLoading(false);
             });
+    }
+
+    const addCommentHandler = async (values) => {
+        commentsService.create(article._id, values.comment)
+            .then(newComment => {
+                newComment.author = { username };
+
+                dispatch({
+                    type: 'ADD_COMMENT',
+                    payload: newComment
+                });
+
+                values.comment = '';
+                toast.success('Коментара е добавен успешно.');
+            })
+            .catch(error => {
+                console.error('Грешка при добавяне на коментар:', error);
+                toast.error('Възникна грешка при добавяне на коментар. Моля, опитайте отново.');
+            });
+    }
+
+    const { values, errors, onChange, onSubmit } = useForm(addCommentHandler, {
+        [CommentFormKeys.Comment]: '',
+    }, addCommentsValidate);
+
+    const commentEditClickHandler = (comment, commentId) => {
+        console.log(comment);
+        console.log(commentId);
+    }
+
+    const commentDeleteClickHandler = (commentId) => {
+        console.log(commentId);
     }
 
     if (loading) {
@@ -149,7 +200,7 @@ const Read = () => {
                     </div>
 
                     <figure>
-                        <img className="imageAspectRatio169 lazyload" src={article.img} alt={article.title} />
+                        <img className="imageAspectRatio169" src={article.img} alt={article.title} />
                     </figure>
                 </div>
             </div>
@@ -160,6 +211,70 @@ const Read = () => {
                         <TextWithLineBreaks article={article.article} />
                     </div>
                 </div>
+            </div>
+
+
+            <div className="row newsLines">
+                <div className="obshtinaHeading">
+                    <div className="headingLine"></div>
+                    <div className="headingText">Коментари</div>
+                </div>
+
+
+            </div>
+
+            <div className="row">
+                <div className="adsFilters row col-12">
+                    <div className="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <ul className="list-unstyled">
+                            {comments.map(comment =>
+                                <CommentsList
+                                    key={comment._id}
+                                    {...comment}
+                                    onEdit={commentEditClickHandler}
+                                    onDelete={commentDeleteClickHandler}
+                                />
+                            )}
+                        </ul>
+                    </div>
+                </div>
+
+                {
+                    isAuthenticated
+                        ? (
+                            <form className="adsFilters row col-12" onSubmit={onSubmit} noValidate>
+                                <div className="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <textarea
+                                        id={CommentFormKeys.Comment}
+                                        name={CommentFormKeys.Comment}
+                                        value={values[CommentFormKeys.Comment]}
+                                        onChange={onChange}
+                                        placeholder="Въведете коментар"
+                                        rows={3}
+                                        type="text"
+                                        className={`form-control ${errors[CommentFormKeys.Comment] ? 'is-invalid' : ''}`}
+                                    />
+                                    {
+                                        errors[CommentFormKeys.Comment] && <div className="invalid-feedback">{errors[CommentFormKeys.Comment]}</div>
+                                    }
+                                </div>
+
+                                <div className="col-12 text-center">
+                                    <button className="submitButton allNewsLinkButton" type="submit">
+                                        Добави коментар
+                                    </button>
+                                </div>
+                            </form>
+                        )
+                        : (
+
+                            <div className="readNews col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div className="alert alert-danger">
+                                    Желаете да добавите коментар? Моля, <Link to='/login' title='Вход'>влезте</Link> в своя акаунт или се <Link to='/register' title='Регистрация'>регистрирайте</Link>.
+                                </div>
+                            </div>
+                        )
+                }
             </div>
         </article>
     );
