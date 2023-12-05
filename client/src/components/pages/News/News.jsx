@@ -8,6 +8,7 @@ import * as newsService from '../../../services/newsService';
 import PaginateLinks from '../../layouts/PaginateLinks';
 import NewsList from './NewsList';
 import withSidebar from '../../../HOC/withSidebar';
+import Loading from '../../layouts/Loading';
 
 const News = () => {
     const [pageTitle, setPageTitle] = useState('Новини');
@@ -86,11 +87,23 @@ const News = () => {
         }
     }, [paramPage, currentPage]);
 
-
     useEffect(() => {
-        newsService.newsPaginate(currentPage, NewsType, categoryId).then(result => {
-            setNews(result);
-        });
+        setLoading(true);
+
+        newsService.newsPaginate(currentPage, NewsType, categoryId)
+            .then(result => {
+                setNews(result);
+            })
+            .catch(error => {
+                console.error('Грешка при извличане на новини:', error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+
+        return () => {
+            setNews([]);
+        };
     }, [currentPage, NewsType, categoryId]);
 
 
@@ -103,6 +116,10 @@ const News = () => {
 
         return `/news?page=${page}`;
     };
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <div className="row">

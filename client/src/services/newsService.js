@@ -52,6 +52,21 @@ export const getOne = async (id) => {
     return result;
 }
 
+export const newsHomePage = async (limit = 3, type = "ALL", categoryId = null) => {
+    const query = new URLSearchParams({
+        offset: `0`,
+        pageSize: `${limit}`,
+    });
+
+    if (type === "CATEGORY") {
+        query.append("where", `category="${categoryId}"`);
+    }
+
+    const result = await request.get(`${Path.News}?sortBy=_createdOn%20desc&${query}`);
+
+    return result;
+}
+
 
 export const newsPaginate = async (page, type = "ALL", categoryId = null) => {
     let OFFSET = (page - 1) * PER_PAGE;
