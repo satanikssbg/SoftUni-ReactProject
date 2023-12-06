@@ -6,6 +6,7 @@ import * as commentsService from '../../../services/commentsService';
 import Loading from "../../layouts/Loading";
 import { formatDateString } from "../../../utils/functionsUtils";
 import ConfirmModal from "../../layouts/ConfirmModal";
+import EditCommentModal from "./EditCommentModal";
 import { toast } from 'react-toastify';
 import withSidebar from "../../../HOC/withSidebar";
 import addCommentsValidate from "./addCommentsValidate";
@@ -27,6 +28,12 @@ const Read = () => {
 
     const [article, setArticle] = useState({});
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+    const [editComment, setEditComment] = useState({});
+    const [showEditCommentModal, setShowEditCommentModal] = useState(false);
+
+    const [showDeleteCommentConfirmModal, setShowDeleteCommentConfirmModal] = useState(false);
+
 
     const [comments, dispatch] = useReducer(commentsReducer, []);
 
@@ -114,18 +121,66 @@ const Read = () => {
             });
     }
 
+    const commentEditClickHandler = (comment, commentId) => {
+        setEditComment({ comment, commentId });
+        setShowEditCommentModal(true);
+    }
+
+    const editCommentHandler = async (values) => {
+        setShowEditCommentModal(false);
+
+        commentsService.edit(values)
+            .then(comment => {
+                dispatch({
+                    type: 'EDIT_COMMENT',
+                    payload: comment
+                });
+
+                toast.success('Коментара е редактиран успешно.');
+            })
+            .catch(error => {
+                console.error('Грешка при редактиране на коментар:', error);
+                toast.error('Възникна грешка при редактиране на коментар. Моля, опитайте отново.');
+            }).finally(() => {
+                setEditComment({});
+            });
+    }
+
+    const commentDeleteClickHandler = (commentId) => {
+        setEditComment({ id: commentId });
+        setShowDeleteCommentConfirmModal(true);
+    }
+
+    const deleteCommentHandler = async () => {
+        setShowEditCommentModal(false);
+
+        commentsService.remove({ id: editComment.id })
+            .then(comments => {
+                dispatch({
+                    type: 'REMOVE_COMMENT',
+                    payload: comments
+                });
+
+                toast.success('Коментара е изтрит успешно.');
+            })
+            .catch(error => {
+                console.error('Грешка при изтриване на коментар:', error);
+                toast.error('Възникна грешка при изтриване на коментар. Моля, опитайте отново.');
+            }).finally(() => {
+                setEditComment({});
+            });
+    }
+
     const { values, errors, onChange, onSubmit } = useForm(addCommentHandler, {
         [CommentFormKeys.Comment]: '',
     }, addCommentsValidate);
 
-    const commentEditClickHandler = (comment, commentId) => {
-        console.log(comment);
-        console.log(commentId);
-    }
-
-    const commentDeleteClickHandler = (commentId) => {
-        console.log(commentId);
-    }
+    const commentPressEnterHandler = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            onSubmit(e);
+        }
+    };
 
     if (loading) {
         return <Loading />;
@@ -231,16 +286,36 @@ const Read = () => {
                     <div className="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         {comments.length > 0
                             ? (
-                                <ul className="list-unstyled">
-                                    {comments.map(comment =>
-                                        <CommentsList
-                                            key={comment._id}
-                                            {...comment}
-                                            onEdit={commentEditClickHandler}
-                                            onDelete={commentDeleteClickHandler}
+                                <>
+                                    {showEditCommentModal &&
+                                        <EditCommentModal
+                                            comment={editComment}
+                                            editCommentHandler={editCommentHandler}
+                                            show={() => setShowEditCommentModal(true)}
+                                            onClose={() => setShowEditCommentModal(false)}
                                         />
-                                    )}
-                                </ul>
+                                    }
+
+                                    {showDeleteCommentConfirmModal &&
+                                        <ConfirmModal
+                                            description="Сигурни ли сте, че искате да изтриете коментара?"
+                                            confim={deleteCommentHandler}
+                                            show={() => setShowDeleteCommentConfirmModal(true)}
+                                            onClose={() => setShowDeleteCommentConfirmModal(false)}
+                                        />
+                                    }
+
+                                    <ul className="list-unstyled">
+                                        {comments.map(comment =>
+                                            <CommentsList
+                                                key={comment._id}
+                                                {...comment}
+                                                onEdit={commentEditClickHandler}
+                                                onDelete={commentDeleteClickHandler}
+                                            />
+                                        )}
+                                    </ul>
+                                </>
                             )
                             : (
                                 <div className="alert alert-info text-center">
@@ -265,6 +340,7 @@ const Read = () => {
                                         rows={3}
                                         type="text"
                                         className={`form-control ${errors[CommentFormKeys.Comment] ? 'is-invalid' : ''}`}
+                                        onKeyPress={commentPressEnterHandler}
                                     />
                                     {
                                         errors[CommentFormKeys.Comment] && <div className="invalid-feedback">{errors[CommentFormKeys.Comment]}</div>

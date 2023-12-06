@@ -9,7 +9,7 @@ import Nav from 'react-bootstrap/Nav';
 import styles from './MainNavbar.module.css';
 
 const MainNavbar = () => {
-    const { isAuthenticated } = useContext(AuthContext);
+    const { isAuthenticated, userRole } = useContext(AuthContext);
 
     return (
         <>
@@ -91,11 +91,16 @@ const MainNavbar = () => {
                                 </>
                             ) : (
                                 <>
-                                    <li className="nav-item">
-                                        <NavLink to="/news/add" className={({ isActive }) => `nav-link ${isActive && (styles.navItemLinkActive)}`}>
-                                            + Новина
-                                        </NavLink>
-                                    </li>
+                                    {
+                                        userRole === "admin" || userRole === "reporter" && (
+                                            <li className="nav-item">
+                                                <NavLink to="/news/add" className={({ isActive }) => `nav-link ${isActive && (styles.navItemLinkActive)}`}>
+                                                    + Новина
+                                                </NavLink>
+                                            </li>
+                                        )
+                                    }
+
                                     <li className="nav-item">
                                         <NavLink to="/logout" className={({ isActive }) => `nav-link ${isActive && (styles.navItemLinkActive)}`}>
                                             Изход

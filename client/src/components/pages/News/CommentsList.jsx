@@ -11,7 +11,7 @@ const CommentsList = ({ _id,
     _createdOn,
     onEdit,
     onDelete }) => {
-    const { isAuthenticated, userId } = useContext(AuthContext);
+    const { isAuthenticated, userId, userRole } = useContext(AuthContext);
 
     return (
         <li className="media border-bottom p-2 m-2">
@@ -21,7 +21,7 @@ const CommentsList = ({ _id,
                         <strong>{username}</strong> написа:
                     </div>
                     <div>
-                        {isAuthenticated && userId === _ownerId && (
+                        {isAuthenticated && (userId === _ownerId || userRole === "admin") && (
                             <div className="btn-group btn-group-sm mr-2" style={{ fontSize: "10px" }}>
                                 <button className="btn btn-success" style={{ fontSize: "10px" }} onClick={() => onEdit(comment, _id)}>
                                     <i className="fa fa-pencil"></i>
