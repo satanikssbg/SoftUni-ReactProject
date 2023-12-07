@@ -39,3 +39,15 @@ export const getAll = async (newId) => {
 
     return result;
 };
+
+export const getMy = async () => {
+    const userId = JSON.parse(localStorage.getItem('auth'))._id;
+
+    const query = new URLSearchParams({
+        where: `_ownerId="${userId}"`,
+        load: `article=newId:news`,
+    });
+
+    const result = await request.get(`${Path.Comments}?${query}`);
+    return result;
+}

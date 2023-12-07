@@ -76,7 +76,7 @@ const Sidebar = () => {
                                 </>
                             )}
                         </ul>
-                        <div class="card-footer p-0 m-0">
+                        <div className="card-footer p-0 m-0">
                             <Link to='/logout' className="submitButton allNewsLinkButton btn-block">
                                 Изход
                             </Link>

@@ -167,10 +167,14 @@ const Read = () => {
                     <div className="articleData">
                         <div>
                             <i className="fas fa-map-marker"></i>
-                            <span className="d-none d-sm-none d-md-inline d-lg-inline d-xl-inline">Регион: {article.region?.region}</span>
+                            <span className="d-none d-sm-none d-md-inline d-lg-inline d-xl-inline">
+                                Регион: <Link to={`/news/region/${article.region?.slug}`} title={`Новини в регион ${article.region?.region}`}>{article.region?.region}</Link>
+                            </span>
 
                             <i className="fas fa-tag"></i>
-                            <span className="d-none d-sm-none d-md-inline d-lg-inline d-xl-inline">Категория: {article.category?.category}</span>
+                            <span className="d-none d-sm-none d-md-inline d-lg-inline d-xl-inline">
+                                Категория: <Link to={`/news/category/${article.category?.slug}`} title={`Новини в категория ${article.category?.category}`}>{article.category?.category}</Link>
+                            </span>
 
                             <i className="far fa-calendar-alt"></i>
                             <span className="d-none d-sm-none d-md-inline d-lg-inline d-xl-inline">Публикувано: {formatDateString(article._createdOn)}</span>

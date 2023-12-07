@@ -68,21 +68,11 @@ const AddNews = () => {
         }
     };
 
-    /*
     const { values, errors, onChange, onSubmit } = useForm(addNewSubmitHandler, {
         [FormKeys.Title]: '',
         [FormKeys.Category]: '',
         [FormKeys.Region]: '',
         [FormKeys.Article]: '',
-        [FormKeys.Img]: '',
-    }, addNewsValidate);
-    */
-
-    const { values, errors, onChange, onSubmit } = useForm(addNewSubmitHandler, {
-        [FormKeys.Title]: `qweqwewqeqwe44 ${new Date().getTime()}`,
-        [FormKeys.Category]: '1',
-        [FormKeys.Region]: '1',
-        [FormKeys.Article]: 'qweqwewqeqwe qweqwewqeqwe qweqwewqeqwe qweqwewqeqwe qweqwewqeqwe',
         [FormKeys.Img]: '',
     }, addNewsValidate);
 
