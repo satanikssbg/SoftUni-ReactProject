@@ -5,8 +5,6 @@ import useForm from "../../../hooks/useForm";
 
 import AuthContext from "../../../contexts/authContext";
 
-import { toast } from 'react-toastify';
-
 import loginValidate from "./loginValidate";
 
 const LoginFormKyes = {
@@ -27,10 +25,26 @@ const LoginPage = () => {
 
     }, [isAuthenticated]);
 
-    const { values, errors, onChange, onSubmit } = useForm(loginSubmitHandler, {
+    const { values, setValues, errors, onChange, onSubmit } = useForm(loginSubmitHandler, {
         [LoginFormKyes.Email]: '',
         [LoginFormKyes.Password]: '',
     }, loginValidate);
+
+    const handleLoginAsClick = (loginAs) => {
+        switch (loginAs) {
+            case 'admin':
+                setValues({ email: 'admin@portal-silistra.eu', password: '123456' });
+                break;
+
+            case 'reporter':
+                setValues({ email: 'reporter@portal-silistra.eu', password: '123456' });
+                break;
+
+            case 'user':
+                setValues({ email: 'peter@abv.bg', password: '123456' });
+                break;
+        }
+    }
 
     return (
         <>
@@ -95,6 +109,26 @@ const LoginPage = () => {
                                 </button>
                             </div>
                         </form>
+
+                        <hr />
+
+                        <div className="d-flex justify-content-center col-12 p-5">
+                            <div className="btn-group">
+                                <button type="button" className="btn btn-secondary disabled" disabled>
+                                    Вход като
+                                </button>
+                                <button type="button" className="btn btn-secondary" onClick={() => handleLoginAsClick('admin')}>
+                                    Администратор
+                                </button>
+                                <button type="button" className="btn btn-secondary" onClick={() => handleLoginAsClick('reporter')}>
+                                    Репортер
+                                </button>
+                                <button type="button" className="btn btn-secondary" onClick={() => handleLoginAsClick('user')}>
+                                    Потребител
+                                </button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

@@ -1,6 +1,13 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 
 import { AuthProvider } from './contexts/authContext';
+import { NewsProvider } from './contexts/newsContext';
+import { CommentsProvider } from './contexts/commentsContext';
+
+import AuthGuard from './guards/AuthGuard';
+
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 import MainNavbar from './components/navbars/MainNavbar';
 import MainMobileNavbar from './components/navbars/MainMobileNavbar';
@@ -16,18 +23,13 @@ import LoginPage from './components/pages/Auth/LoginPage';
 import RegisterPage from './components/pages/Auth/RegisterPage';
 import LogoutPage from './components/pages/Auth/LogoutPage';
 
-import ErrorPage from './components/pages/ErrorPage';
-
-import { ToastContainer } from 'react-toastify';
-
-import 'react-toastify/dist/ReactToastify.css';
 import AddNews from './components/pages/News/AddNews';
-
-import AuthGuard from './guards/AuthGuard';
-import { NewsProvider } from './contexts/newsContext';
 import Read from './components/pages/News/Read';
 import EditNews from './components/pages/News/EditNews';
-import { CommentsProvider } from './contexts/commentsContext';
+import MyComments from './components/profile/MyComments';
+import MyNews from './components/profile/MyNews';
+
+import ErrorPage from './components/pages/ErrorPage';
 
 function App() {
     const location = useLocation();
@@ -48,7 +50,7 @@ function App() {
                         <Route path="/news" element={<News />} />
                         <Route path="/news/category/:slug" element={<News />} />
                         <Route path="/news/region/:region" element={<News />} />
-                        
+
                         <Route path="/news/:id" element={<CommentsProvider><Read /></CommentsProvider>} />
 
                         <Route path="/login" element={<LoginPage />} />
@@ -57,6 +59,8 @@ function App() {
                         <Route element={<AuthGuard />}>
                             <Route path="/news/add" element={<AddNews />} />
                             <Route path="/news/edit/:id" element={<EditNews />} />
+                            <Route path="/profile/comments" element={<MyComments />} />
+                            <Route path="/profile/news" element={<MyNews />} />
                             <Route path="/logout" element={<LogoutPage />} />
                         </Route>
 

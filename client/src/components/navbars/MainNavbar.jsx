@@ -71,7 +71,7 @@ const MainNavbar = () => {
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/news" end className={({ isActive }) => `nav-link ${isActive && (styles.navItemLinkActive)}`}>
+                                <NavLink to="/news" className={({ isActive }) => `nav-link ${isActive && (styles.navItemLinkActive)}`}>
                                     Новини
                                 </NavLink>
                             </li>
@@ -92,9 +92,9 @@ const MainNavbar = () => {
                             ) : (
                                 <>
                                     {
-                                        userRole === "admin" || userRole === "reporter" && (
+                                        (userRole === "admin" || userRole === "reporter") && (
                                             <li className="nav-item">
-                                                <NavLink to="/news/add" className={({ isActive }) => `nav-link ${isActive && (styles.navItemLinkActive)}`}>
+                                                <NavLink to="/news/add" end className={({ isActive }) => `nav-link ${isActive && (styles.navItemLinkActive)}`}>
                                                     + Новина
                                                 </NavLink>
                                             </li>

@@ -66,6 +66,7 @@ const useForm = (submitHandler, initialValues, validation) => {
 
     return {
         values,
+        setValues,
         errors,
         onChange,
         onSubmit,

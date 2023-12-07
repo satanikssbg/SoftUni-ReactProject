@@ -63,6 +63,7 @@ export const AuthProvider = ({
         userRole: !!auth.accessToken ? auth.role : false,
         userId: !!auth.accessToken ? auth._id : false,
         username: !!auth.accessToken ? auth.username : false,
+        userInfo: !!auth.accessToken ? auth : false,
     };
 
     return (
