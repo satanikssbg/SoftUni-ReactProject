@@ -15,7 +15,7 @@ const CommentsList = ({
     const { isAuthenticated, userId, userRole } = useContext(AuthContext);
 
     return (
-        <li className={`media border-bottom p-2 m-2 ${(isAuthenticated && userId === _ownerId) ? 'table-info' : ''}`}>
+        <li id={`comment${_id}`} className={`media border-bottom p-2 m-2 ${(isAuthenticated && userId === _ownerId) ? 'table-info' : ''}`}>
             <div className="media-body">
                 <div className="d-flex justify-content-between">
                     <div>

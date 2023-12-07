@@ -13,7 +13,7 @@ const HomePage = () => {
     useEffect(() => {
         setLoading(true);
 
-        newsService.newsHomePage(6)
+        newsService.newsHomePage(9)
             .then(result => {
                 setNews(result);
             })

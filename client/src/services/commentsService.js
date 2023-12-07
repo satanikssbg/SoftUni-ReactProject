@@ -48,6 +48,6 @@ export const getMy = async () => {
         load: `article=newId:news`,
     });
 
-    const result = await request.get(`${Path.Comments}?${query}`);
+    const result = await request.get(`${Path.Comments}?sortBy=_createdOn%20desc&${query}`);
     return result;
 }

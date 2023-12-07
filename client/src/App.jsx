@@ -38,6 +38,7 @@ function App() {
     return (
         <AuthProvider>
             <NewsProvider>
+
                 <MainNavbar />
                 {pathname.startsWith('/silistra') && (<SilistraNavbar />)}
                 <MainMobileNavbar />

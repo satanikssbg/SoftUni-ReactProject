@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
 import withSidebar from "../../HOC/withSidebar";
 
 import * as commentsService from '../../services/commentsService';
-import Loading from "../layouts/Loading";
-import { Link } from "react-router-dom";
+
 import { formatDateString } from "../../utils/functionsUtils";
+
+import Loading from "../layouts/Loading";
 
 const MyComments = () => {
     const [loading, setLoading] = useState(false);
@@ -27,8 +30,6 @@ const MyComments = () => {
         });
     }, []);
 
-
-
     if (loading) {
         return <Loading />;
     }
@@ -47,7 +48,9 @@ const MyComments = () => {
                     {comments.map(({ _id, comment, newId, _createdOn, article: { title, img } }) => (
                         <div className="col-12" key={_id}>
                             <div className="media border-bottom m-2 mb-5">
-                                <img src={img} className="mr-3" alt={title} style={{ maxWidth: "86px" }} />
+                                <Link to={`/news/${newId}`} title={title}>
+                                    <img src={img} className="mr-3" alt={title} style={{ maxWidth: "86px" }} />
+                                </Link>
                                 <div className="media-body">
                                     <p className="p-2 m-0" style={{ backgroundColor: '#f7f7f7', border: '1px solid #dfdfdf', borderRadius: '5px' }}>
                                         <em>{comment}</em>
