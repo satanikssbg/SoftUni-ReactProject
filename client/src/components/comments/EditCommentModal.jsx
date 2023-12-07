@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
+
+import useForm from '../../hooks/useForm';
+
+import addCommentsValidate from "./addCommentsValidate";
+
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import useForm from '../../../hooks/useForm';
-import addCommentsValidate from "./addCommentsValidate";
 
 const CommentFormKeys = {
     Comment: 'comment',

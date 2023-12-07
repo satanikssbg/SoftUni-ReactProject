@@ -1,4 +1,4 @@
-import { validationCommon } from '../../../utils/functionsUtils';
+import { validationCommon } from '../../utils/functionsUtils';
 
 const addCommentsValidate = (errors, name, value) => {
     switch (name) {

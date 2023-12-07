@@ -1,18 +1,24 @@
 import { useContext, useEffect, useReducer, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import AuthContext from "../../../contexts/authContext";
-import * as newsService from '../../../services/newsService';
-import * as commentsService from '../../../services/commentsService';
-import Loading from "../../layouts/Loading";
-import { formatDateString } from "../../../utils/functionsUtils";
-import ConfirmModal from "../../layouts/ConfirmModal";
-import EditCommentModal from "./EditCommentModal";
-import { toast } from 'react-toastify';
-import withSidebar from "../../../HOC/withSidebar";
-import addCommentsValidate from "./addCommentsValidate";
+
 import useForm from "../../../hooks/useForm";
-import commentsReducer from "./commentsReducer";
-import CommentsList from "./CommentsList";
+
+import AuthContext from "../../../contexts/authContext";
+import CommentsContext from "../../../contexts/commentsContext";
+
+import * as newsService from '../../../services/newsService';
+
+import { formatDateString } from "../../../utils/functionsUtils";
+
+import withSidebar from "../../../HOC/withSidebar";
+
+import addCommentsValidate from "../../comments/addCommentsValidate";
+
+import ConfirmModal from "../../layouts/ConfirmModal";
+import CommentsList from "../../comments/CommentsList";
+import Loading from "../../layouts/Loading";
+
+import { toast } from 'react-toastify';
 
 const CommentFormKeys = {
     Comment: 'comment',
@@ -29,13 +35,7 @@ const Read = () => {
     const [article, setArticle] = useState({});
     const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-    const [editComment, setEditComment] = useState({});
-    const [showEditCommentModal, setShowEditCommentModal] = useState(false);
-
-    const [showDeleteCommentConfirmModal, setShowDeleteCommentConfirmModal] = useState(false);
-
-
-    const [comments, dispatch] = useReducer(commentsReducer, []);
+    const { comments, addCommentHandler, commentEditClickHandler, commentDeleteClickHandler } = useContext(CommentsContext);
 
     useEffect(() => {
         setLoading(true);
@@ -49,14 +49,6 @@ const Read = () => {
             })
             .finally(() => {
                 setLoading(false);
-            });
-
-        commentsService.getAll(id)
-            .then((result) => {
-                dispatch({
-                    type: 'GET_ALL_COMMENTS',
-                    payload: result,
-                });
             });
 
         return () => {
@@ -99,75 +91,6 @@ const Read = () => {
             })
             .finally(() => {
                 setLoading(false);
-            });
-    }
-
-    const addCommentHandler = async (values) => {
-        commentsService.create(article._id, values.comment)
-            .then(newComment => {
-                newComment.author = { username };
-
-                dispatch({
-                    type: 'ADD_COMMENT',
-                    payload: newComment
-                });
-
-                values.comment = '';
-                toast.success('Коментара е добавен успешно.');
-            })
-            .catch(error => {
-                console.error('Грешка при добавяне на коментар:', error);
-                toast.error('Възникна грешка при добавяне на коментар. Моля, опитайте отново.');
-            });
-    }
-
-    const commentEditClickHandler = (comment, commentId) => {
-        setEditComment({ comment, commentId });
-        setShowEditCommentModal(true);
-    }
-
-    const editCommentHandler = async (values) => {
-        setShowEditCommentModal(false);
-
-        commentsService.edit(values)
-            .then(comment => {
-                dispatch({
-                    type: 'EDIT_COMMENT',
-                    payload: comment
-                });
-
-                toast.success('Коментара е редактиран успешно.');
-            })
-            .catch(error => {
-                console.error('Грешка при редактиране на коментар:', error);
-                toast.error('Възникна грешка при редактиране на коментар. Моля, опитайте отново.');
-            }).finally(() => {
-                setEditComment({});
-            });
-    }
-
-    const commentDeleteClickHandler = (commentId) => {
-        setEditComment({ id: commentId });
-        setShowDeleteCommentConfirmModal(true);
-    }
-
-    const deleteCommentHandler = async () => {
-        setShowEditCommentModal(false);
-
-        commentsService.remove({ id: editComment.id })
-            .then(comments => {
-                dispatch({
-                    type: 'REMOVE_COMMENT',
-                    payload: comments
-                });
-
-                toast.success('Коментара е изтрит успешно.');
-            })
-            .catch(error => {
-                console.error('Грешка при изтриване на коментар:', error);
-                toast.error('Възникна грешка при изтриване на коментар. Моля, опитайте отново.');
-            }).finally(() => {
-                setEditComment({});
             });
     }
 
@@ -287,24 +210,6 @@ const Read = () => {
                         {comments.length > 0
                             ? (
                                 <>
-                                    {showEditCommentModal &&
-                                        <EditCommentModal
-                                            comment={editComment}
-                                            editCommentHandler={editCommentHandler}
-                                            show={() => setShowEditCommentModal(true)}
-                                            onClose={() => setShowEditCommentModal(false)}
-                                        />
-                                    }
-
-                                    {showDeleteCommentConfirmModal &&
-                                        <ConfirmModal
-                                            description="Сигурни ли сте, че искате да изтриете коментара?"
-                                            confim={deleteCommentHandler}
-                                            show={() => setShowDeleteCommentConfirmModal(true)}
-                                            onClose={() => setShowDeleteCommentConfirmModal(false)}
-                                        />
-                                    }
-
                                     <ul className="list-unstyled">
                                         {comments.map(comment =>
                                             <CommentsList

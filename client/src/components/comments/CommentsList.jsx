@@ -1,10 +1,11 @@
 import { useContext } from "react";
 
-import AuthContext from "../../../contexts/authContext";
+import AuthContext from "../../contexts/authContext";
 
-import { formatDateString } from "../../../utils/functionsUtils";
+import { formatDateString } from "../../utils/functionsUtils";
 
-const CommentsList = ({ _id,
+const CommentsList = ({
+    _id,
     comment,
     author: { username },
     _ownerId,

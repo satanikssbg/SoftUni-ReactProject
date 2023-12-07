@@ -1,4 +1,4 @@
-const commentsReducer = (state, action) => {
+export const commentsReducer = (state, action) => {
     switch (action?.type) {
         case 'GET_ALL_COMMENTS':
             return [...action.payload];
@@ -12,9 +12,10 @@ const commentsReducer = (state, action) => {
         case 'REMOVE_COMMENT':
             return state.filter(removeComment => removeComment._id !== action.payload._id);
 
+        case 'CLEAR_COMMENTS':
+            return [];
+
         default:
             return state;
     }
-}
-
-export default commentsReducer;
+};
