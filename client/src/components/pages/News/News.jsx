@@ -26,7 +26,7 @@ const News = () => {
     const paramPage = searchParams.get('page');
 
     const location = useLocation();
-    const { slug, region } = useParams();
+    const { slug, region, search } = useParams();
 
     const navigate = useNavigate();
 
@@ -39,20 +39,27 @@ const News = () => {
     } else if (location.pathname.includes('/news/region') && region) {
         NewsType = "REGION";
         checkParam = region;
+    } else if (location.pathname.includes('/news/search') && search) {
+        NewsType = "SEARCH";
+        checkParam = search;
     }
 
     if (checkParam) {
         newsService.existCategoryRegion(NewsType, checkParam).then(res => {
-            if (res.length !== 1) {
+            if (res.length !== 1 && NewsType !== "SEARCH") {
                 navigate('/news');
             } else {
                 const result = res[0];
-                setCategoryId(result._id);
 
                 if (NewsType === "CATEGORY") {
+                    setCategoryId(result._id);
                     setPageTitle(`Новини в кагегория ${result.category}`);
                 } else if (NewsType === "REGION") {
+                    setCategoryId(result._id);
                     setPageTitle(`Новини в регион ${result.region}`);
+                } else if (NewsType === "SEARCH") {
+                    setCategoryId(checkParam);
+                    setPageTitle(`Резултати от търсене за ${checkParam}`);
                 }
             }
         });
@@ -112,6 +119,8 @@ const News = () => {
             return `/news/category/${slug}?page=${page}`;
         } else if (type === "REGION") {
             return `/news/region/${slug}?page=${page}`;
+        } else if (type === "SEARCH") {
+            return `/news/search/${slug}?page=${page}`;
         }
 
         return `/news?page=${page}`;

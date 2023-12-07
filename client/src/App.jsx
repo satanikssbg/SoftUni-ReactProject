@@ -49,6 +49,7 @@ function App() {
                         <Route path="/silistra/*" element={<SilistraPage />} />
 
                         <Route path="/news" element={<News />} />
+                        <Route path="/news/search/:search" element={<News />} />
                         <Route path="/news/category/:slug" element={<News />} />
                         <Route path="/news/region/:region" element={<News />} />
 

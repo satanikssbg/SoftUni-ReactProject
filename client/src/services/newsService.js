@@ -71,7 +71,7 @@ export const newsHomePage = async (limit = 3, type = "ALL", categoryId = null) =
 export const newsPaginate = async (page, type = "ALL", categoryId = null) => {
     let OFFSET = (page - 1) * PER_PAGE;
 
-    const query = new URLSearchParams({
+    let query = new URLSearchParams({
         offset: `${OFFSET}`,
         pageSize: `${PER_PAGE}`,
         load: [
@@ -84,6 +84,8 @@ export const newsPaginate = async (page, type = "ALL", categoryId = null) => {
         query.append("where", `category="${categoryId}"`);
     } else if (type === "REGION") {
         query.append("where", `region="${categoryId}"`);
+    } else if (type === "SEARCH") {
+        query = query.toString() + `&where=title LIKE "${categoryId}"`;
     }
 
     //const queryString = query.toString().replace(/\+/g, '%20');
@@ -105,6 +107,8 @@ export const allNewsCount = async (type = "ALL", categoryId = null) => {
         query = new URLSearchParams({
             where: `region="${categoryId}"`
         });
+    } else if (type === "SEARCH") {
+        query = `where=title LIKE "${categoryId}"`;
     }
 
     const result = await request.get(`${Path.News}?count${query ? `&${query}` : ''}`);
@@ -125,16 +129,21 @@ export const getRegions = async () => {
 };
 
 export const existCategoryRegion = async (type, slug) => {
-    const query = new URLSearchParams({
+    let query = new URLSearchParams({
         where: `slug="${slug}"`
     });
 
     let result;
+    let escapedSearch;
 
     if (type === "CATEGORY") {
         result = await request.get(`${Path.GetCategories}?${query}`);
     } else if (type === "REGION") {
         result = await request.get(`${Path.GetRegions}?${query}`);
+    } else if (type === "SEARCH") {
+        escapedSearch = JSON.stringify(slug).slice(1, -1);
+
+        result = await request.get(`${Path.News}?where=title LIKE "${escapedSearch}"`);
     }
 
     return result;
