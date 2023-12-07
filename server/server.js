@@ -1356,6 +1356,74 @@
         }
     };
     var seedData = {
+        comments: {
+            "1": {
+                "_ownerId": "1",
+                "newId": "12520",
+                "comment": "GTAV trailer gets 101 million views in 12 years, while GTAVI gets 106 million in just 24 hours it shows that this is the most anticipated video game in history.",
+                "_createdOn": 1701943176857,
+            },
+            "2": {
+                "_ownerId": "1",
+                "newId": "12520",
+                "comment": "Love this. I've been a gamer for 34 years. From what I saw as a young child until now has been such a ride. From NES to this I am so grateful to have seen it all.",
+                "_createdOn": 1701943176857,
+            },
+            "3": {
+                "_ownerId": "2",
+                "newId": "12520",
+                "comment": "The fact that this video has been released only a day ago and already has 90+ million views is insane and it goes to show you how this franchise has touched millions of people.",
+                "_createdOn": 1701943176857,
+            },
+            "4": {
+                "_ownerId": "1",
+                "newId": "12520",
+                "comment": "The attention to detail in the environment is insane! From bustling urban areas to serene countryside, it looks like the map will be incredibly diverse. Rockstar, you've set the bar high!",
+                "_createdOn": 1701943176857,
+            },
+            "5": {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "newId": "12520",
+                "comment": "A minute of silence in honor of all loyal fans who didn't live to see this legendary moment.",
+                "_createdOn": 1701943176857,
+            },
+            "6": {
+                "_ownerId": "1",
+                "newId": "12520",
+                "comment": "It's crazy that even as adults these still make us feel kids again.",
+                "_createdOn": 1701943176857,
+            },
+            "7": {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "newId": "12520",
+                "comment": "Greatest game of all time,the only game that literally never disappoints us",
+                "_createdOn": 1701943176857,
+            },
+            "8": {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "newId": "12520",
+                "comment": "My journey with GTA began as a kid with GTA III, and each game since then holds a treasure trove of memories. Here’s wishing good health to everyone eager to dive into GTA VI and create new memorable experiences!",
+                "_createdOn": 1701943176857,
+            },
+            "9": {
+                "_ownerId": "2",
+                "newId": "12520",
+                "comment": "I am confident that Grand Theft Auto VI will live up to the hype. Rockstar Games has a proven track record of delivering exceptional games, and I have no reason to believe that this time will be any different.",
+                "_createdOn": 1701943176857,
+            },
+            "10": {
+                "_ownerId": "35c62d76-8152-4626-8712-eeb96381bea8",
+                "newId": "12520",
+                "comment": "The trailer was a tantalizing glimpse into a world of possibilities. It hinted at a story filled with intrigue, danger, and humor, and it gave us just enough to whet our appetites for more.",
+                "_createdOn": 1701943176857,
+            },
+            "11": {
+                "_ownerId": "1",
+                "newId": "12520",
+                "comment": "I have no doubt that Grand Theft Auto VI will be a game-changer. It will redefine what is possible in open-world games, and it will set the standard for years to come.",
+                "_createdOn": 1701943176857,
+            }
+        },
         news: {
             "12274": {
                 "title": "Сабанов: Грижа за малките и големи земеделски производители, подкрепа за бизнеса и инвестициите",
