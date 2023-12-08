@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import AuthContext from "../../contexts/authContext";
 import { Link } from "react-router-dom";
 
+import AuthContext from "../../contexts/authContext";
 
 const Sidebar = () => {
     const { isAuthenticated, username, userRole, userInfo } = useContext(AuthContext);

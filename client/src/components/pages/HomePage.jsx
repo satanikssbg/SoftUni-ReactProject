@@ -35,17 +35,21 @@ const HomePage = () => {
     }
 
     return (
-        <>
-            <section>
-                <div className="row siteColorBackground">
-                    <div className="newsLines row">
-                        {
-                            news.map(article => <NewsHomeList {...article} key={`lastNews${article._id}`} />)
-                        }
-                    </div>
+        <section>
+            <div className="obshtinaHeading">
+                <div className="headingLine" />
+                <div className="headingText">Последни новини</div>
+            </div>
+
+
+            <div className="row siteColorBackground">
+                <div className="newsLines row">
+                    {
+                        news.map(article => <NewsHomeList {...article} key={`lastNews${article._id}`} />)
+                    }
                 </div>
-            </section>
-        </>
+            </div>
+        </section>
     );
 }
 
