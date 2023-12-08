@@ -1,19 +1,19 @@
-import { useContext } from 'react';
+import { useEffect, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Search from '../Search';
-import { useEffect, useState, useRef } from 'react';
 
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import { getRegions } from '../../services/newsService';
-import { objectChunk } from '../../utils/functionsUtils';
 import AuthContext from '../../contexts/authContext';
 import NewsContext from '../../contexts/newsContext';
 
-const MainMobileNavbar = () => {
-    const { isAuthenticated } = useContext(AuthContext);
-    let { categories, regions } = useContext(NewsContext);
+import { objectChunk } from '../../utils/functionsUtils';
 
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+
+import Search from '../Search';
+
+const MainMobileNavbar = () => {
+    const { isAuthenticated, username, userRole } = useContext(AuthContext);
+    let { categories, regions } = useContext(NewsContext);
 
     const dropdownMenuRef = useRef(null);
 
@@ -70,17 +70,34 @@ const MainMobileNavbar = () => {
 
                         <div className=" col-6 col-sm-6 d-block d-sm-block d-md-none d-lg-none d-xl- none">
                             <ul className="navbar-nav ml-auto flex-nowrap">
-                                <li className="nav-item">
-                                    <Nav.Link href='/register' to='/register' as={Link} className="nav-link">
-                                        Регистрация
-                                    </Nav.Link>
-                                </li>
                                 {isAuthenticated && (
-                                    <li className="nav-item">
-                                        <Nav.Link href='/login' to='/login' as={Link} className="nav-link">
-                                            Вход
-                                        </Nav.Link>
-                                    </li>
+                                    <>
+                                        <li className="nav-item">
+                                            <Nav.Link href='/profile/comments' to='/profile/comments' as={Link} className="nav-link">
+                                                {username}
+                                            </Nav.Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Nav.Link href='/logout' to='/logout' as={Link} className="nav-link">
+                                                Изход
+                                            </Nav.Link>
+                                        </li>
+                                    </>
+                                )}
+
+                                {!isAuthenticated && (
+                                    <>
+                                        <li className="nav-item">
+                                            <Nav.Link href='/login' to='/login' as={Link} className="nav-link">
+                                                Вход
+                                            </Nav.Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Nav.Link href='/register' to='/register' as={Link} className="nav-link">
+                                                Регистрация
+                                            </Nav.Link>
+                                        </li>
+                                    </>
                                 )}
 
                                 <li className="nav-item">
@@ -144,23 +161,27 @@ const MainMobileNavbar = () => {
                             );
                         })}
 
-                        <hr
-                            className="d-block d-sm-block d-md-none d-lg-none d-xl-none"
-                            style={{ borderBottom: "1px solid #dcdede", width: "100%" }}
-                        />
+                        {(isAuthenticated && (userRole === "admin" || userRole === "reporter")) && (
+                            <>
+                                <hr
+                                    className="d-block d-sm-block d-md-none d-lg-none d-xl-none"
+                                    style={{ borderBottom: "1px solid #dcdede", width: "100%" }}
+                                />
 
-                        <div
-                            className="col-12 col-sm-12 d-block d-sm-block d-md-blocl d-lg-none d-xl-none"
-                            style={{ textAlign: "center" }}
-                        >
-                            <a
-                                className="submitButtonWhite allNewsLinkButton d-block"
-                                href="{{ url('/news/add') }}"
-                                title="Предлагане на новина"
-                            >
-                                Предложи новина
-                            </a>
-                        </div>
+                                <div
+                                    className="col-12 col-sm-12 d-block d-sm-block d-md-blocl d-lg-none d-xl-none"
+                                    style={{ textAlign: "center" }}
+                                >
+                                    <Link
+                                        className="submitButtonWhite allNewsLinkButton d-block"
+                                        to="/news/add"
+                                        title="Предлагане на новина"
+                                    >
+                                        Предложи новина
+                                    </Link>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </Navbar.Collapse>
             </nav>
