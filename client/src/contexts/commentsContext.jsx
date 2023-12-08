@@ -28,7 +28,7 @@ export const CommentsProvider = ({
         const splitUrl = location.pathname.split('/');
         const lastElement = splitUrl[splitUrl.length - 1];
 
-        if ((/^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[ab0-9A-Fa-f]{4}-[a-fA-F0-9]{12}$/).test(last) || (/^\d+$/).test(lastElement)) {
+        if ((/^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[ab0-9A-Fa-f]{4}-[a-fA-F0-9]{12}$/).test(lastElement) || (/^\d+$/).test(lastElement)) {
             id = lastElement;
         }
     }
