@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
 
-const APP_URL = 'http://localhost:5173';
+const APP_URL = 'http://127.0.0.1:5173';
 const API_URL = 'http://localhost:3030';
 
 const PER_PAGE = Number(10);

@@ -1,9 +1,10 @@
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import useForm from "../../../hooks/useForm";
 
 import NewsContext from "../../../contexts/newsContext";
+import AuthContext from "../../../contexts/authContext";
 
 import * as request from '../../../lib/request';
 import upload from "../../../lib/upload";
@@ -28,6 +29,12 @@ const FormKeys = {
 };
 
 const AddNews = () => {
+    const { userRole } = useContext(AuthContext);
+
+    if (userRole !== "admin" && userRole !== "reporter") {
+        return <Navigate to='/' />;
+    }
+
     const { categories, regions } = useContext(NewsContext);
     const [loading, setLoading] = useState(false);
 

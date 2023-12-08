@@ -23,19 +23,6 @@ const upload = async (file) => {
                 let newWidth, newHeight;
                 const aspectRatio = img.width / img.height;
 
-                /*
-                if (img.width > img.height) {
-                    newWidth = targetWidth;
-                    newHeight = targetWidth / aspectRatio;
-                } else {
-                    newWidth = targetHeight * aspectRatio;
-                    newHeight = targetHeight;
-                }
-
-                const xOffset = (newWidth - targetWidth) / 2;
-                const yOffset = (newHeight - targetHeight) / 2;
-                */
-
                 newWidth = targetWidth;
                 newHeight = targetWidth / aspectRatio;
 

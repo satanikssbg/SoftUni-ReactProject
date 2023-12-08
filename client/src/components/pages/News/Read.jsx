@@ -1,4 +1,4 @@
-import { useContext, useEffect, useReducer, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import useForm from "../../../hooks/useForm";
@@ -8,11 +8,11 @@ import CommentsContext from "../../../contexts/commentsContext";
 
 import * as newsService from '../../../services/newsService';
 
+import addCommentsValidate from "../../comments/addCommentsValidate";
+
 import { formatDateString } from "../../../utils/functionsUtils";
 
 import withSidebar from "../../../HOC/withSidebar";
-
-import addCommentsValidate from "../../comments/addCommentsValidate";
 
 import ConfirmModal from "../../layouts/ConfirmModal";
 import CommentsList from "../../comments/CommentsList";

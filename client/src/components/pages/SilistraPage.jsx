@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom';
 import InformationPage from './Silistra/InformationPage';
 import HistoryPage from './Silistra/HistoryPage';
 import HolidayPage from './Silistra/HolidayPage';
-import SightsPage from './Silistra/SightsPage';
 import ErrorPage from './ErrorPage';
 
 import Sidebar from '../layouts/Sidebar';
@@ -16,7 +15,6 @@ const SilistraPage = () => {
                     <Route path="/" element={<InformationPage />} />
                     <Route path="/history" element={<HistoryPage />} />
                     <Route path="/holiday" element={<HolidayPage />} />
-                    <Route path="/sights" element={<SightsPage />} />
                     <Route path="*" element={<ErrorPage />} />
                 </Routes>
             </div>

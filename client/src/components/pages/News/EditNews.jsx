@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import useForm from "../../../hooks/useForm";
 
@@ -31,8 +31,14 @@ const FormKeys = {
 };
 
 const EditNews = () => {
-    const { id } = useParams();
     const { userRole, userId } = useContext(AuthContext);
+
+    if (userRole !== "admin" && userRole !== "reporter") {
+        return <Navigate to='/' />;
+    }
+
+    const { id } = useParams();
+
     const { categories, regions } = useContext(NewsContext);
 
     const [article, setArticle] = useState({});

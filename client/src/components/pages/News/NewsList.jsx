@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+
 import { stringLimiter, formatDateString } from "../../../utils/functionsUtils";
 
 const NewsList = ({

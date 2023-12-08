@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+
 import { formatDateString, stringLimiter } from "../../../utils/functionsUtils";
 
 const NewsHomeList = ({ _id, title, img, _createdOn }) => {

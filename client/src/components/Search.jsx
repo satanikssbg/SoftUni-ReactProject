@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import useForm from "../hooks/useForm";
 
 import { validationCommon } from "../utils/functionsUtils";
-import { useNavigate } from "react-router-dom";
 
 const SearchFormKeys = {
     Search: 'search'

@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { commentsReducer } from '../components/comments/commentsReducer';
-
 import AuthContext from "./authContext";
 
 import * as commentsService from '../services/commentsService';
+
+import { commentsReducer } from '../components/comments/commentsReducer';
 
 import EditCommentModal from "../components/comments/EditCommentModal";
 import ConfirmModal from "../components/layouts/ConfirmModal";

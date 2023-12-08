@@ -3,13 +3,16 @@ import { useLocation, useNavigate, useParams, useSearchParams } from 'react-rout
 
 import { PER_PAGE } from '../../../config';
 
+import AuthContext from '../../../contexts/authContext';
+
 import * as newsService from '../../../services/newsService';
 
-import PaginateLinks from '../../layouts/PaginateLinks';
-import NewsList from './NewsList';
 import withSidebar from '../../../HOC/withSidebar';
+
+import NewsList from './NewsList';
+import PaginateLinks from '../../layouts/PaginateLinks';
 import Loading from '../../layouts/Loading';
-import AuthContext from '../../../contexts/authContext';
+
 
 const News = ({ userId }) => {
     const { isAuthenticated } = useContext(AuthContext);

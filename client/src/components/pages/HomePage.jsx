@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
-import withSidebar from "../../HOC/withSidebar";
 import { useEffect, useState } from "react";
 
 import * as newsService from '../../services/newsService';
-import Loading from "../layouts/Loading";
+
+import withSidebar from "../../HOC/withSidebar";
+
 import NewsHomeList from "./News/NewsHomeList";
+import Loading from "../layouts/Loading";
 
 const HomePage = () => {
     const [news, setNews] = useState([]);
