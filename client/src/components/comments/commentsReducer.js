@@ -19,3 +19,22 @@ export const commentsReducer = (state, action) => {
             return state;
     }
 };
+
+export const commentsLatestReducer = (state, action) => {
+    switch (action?.type) {
+        case 'GET_COMMENTS':
+            return [...action.payload];
+
+        case 'ADD_COMMENT':
+            return [action.payload, ...state.slice(0, -1)];
+
+        case 'EDIT_COMMENT':
+            return state.map(editComment => editComment._id === action.payload._id ? { ...editComment, comment: action.payload.comment } : editComment);
+
+        case 'CLEAR_COMMENTS':
+            return [];
+
+        default:
+            return state;
+    }
+};

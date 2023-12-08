@@ -35,6 +35,8 @@ export const getAll = async (newId) => {
         load: `author=_ownerId:users`,
     });
 
+    console.log(newId);
+
     const result = await request.get(`${Path.Comments}?${query}`);
 
     return result;
@@ -51,3 +53,15 @@ export const getMy = async () => {
     const result = await request.get(`${Path.Comments}?sortBy=_createdOn%20desc&${query}`);
     return result;
 }
+
+export const latest = async () => {
+    let query = new URLSearchParams({
+        offset: '0',
+        pageSize: '5',
+        load: `author=_ownerId:users`,
+    });
+
+    const result = await request.get(`${Path.Comments}?sortBy=_createdOn%20desc&${query}`);
+
+    return result;
+};

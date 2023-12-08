@@ -16,8 +16,6 @@ import { removeKeysForForms } from "../../../utils/functionsUtils";
 
 import Path from "../../../paths";
 
-import withSidebar from '../../../HOC/withSidebar';
-
 import Loading from "../../layouts/Loading";
 
 import { toast } from 'react-toastify';
@@ -272,4 +270,4 @@ const EditNews = () => {
     );
 };
 
-export default withSidebar(EditNews);
+export default EditNews;

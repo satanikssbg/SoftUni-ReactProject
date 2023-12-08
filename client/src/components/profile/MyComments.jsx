@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import withSidebar from "../../HOC/withSidebar";
-
 import * as commentsService from '../../services/commentsService';
 
 import { formatDateString } from "../../utils/functionsUtils";
@@ -78,4 +76,4 @@ const MyComments = () => {
     );
 };
 
-export default withSidebar(MyComments);
+export default MyComments;

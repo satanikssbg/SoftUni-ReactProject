@@ -31,6 +31,7 @@ import Footer from "./components/layouts/Footer"
 
 import ErrorPage from './components/pages/ErrorPage';
 import ErrorBoundary from './components/ErrorBoundary';
+import Sidebar from './components/layouts/Sidebar';
 
 function App() {
     const location = useLocation();
@@ -46,31 +47,39 @@ function App() {
                     <MainMobileNavbar />
 
                     <div id="content" className="container" style={{ marginTop: '20px' }}>
-                        <Routes>
-                            <Route path="/" element={<HomePage />} />
-                            <Route path="/silistra/*" element={<SilistraPage />} />
+                        <div className="row">
+                            <CommentsProvider>
+                                <div className="contentWrap row col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                                    <Routes>
+                                        <Route path="/" element={<HomePage />} />
+                                        <Route path="/silistra/*" element={<SilistraPage />} />
 
-                            <Route path="/news" element={<News />} />
-                            <Route path="/news/search/:search" element={<News />} />
-                            <Route path="/news/category/:slug" element={<News />} />
-                            <Route path="/news/region/:region" element={<News />} />
-                            <Route path="/news/:id" element={<CommentsProvider><Read /></CommentsProvider>} />
+                                        <Route path="/news" element={<News />} />
+                                        <Route path="/news/search/:search" element={<News />} />
+                                        <Route path="/news/category/:slug" element={<News />} />
+                                        <Route path="/news/region/:region" element={<News />} />
+                                        <Route path="/news/:id" element={<Read />} />
 
-                            <Route path="/login" element={<LoginPage />} />
-                            <Route path="/register" element={<RegisterPage />} />
+                                        <Route path="/login" element={<LoginPage />} />
+                                        <Route path="/register" element={<RegisterPage />} />
 
-                            <Route element={<AuthGuard />}>
-                                <Route path="/news/add" element={<AddNews />} />
-                                <Route path="/news/edit/:id" element={<EditNews />} />
+                                        <Route element={<AuthGuard />}>
+                                            <Route path="/news/add" element={<AddNews />} />
+                                            <Route path="/news/edit/:id" element={<EditNews />} />
 
-                                <Route path="/profile/comments" element={<MyComments />} />
-                                <Route path="/profile/news" element={<MyNews />} />
+                                            <Route path="/profile/comments" element={<MyComments />} />
+                                            <Route path="/profile/news" element={<MyNews />} />
 
-                                <Route path="/logout" element={<LogoutPage />} />
-                            </Route>
+                                            <Route path="/logout" element={<LogoutPage />} />
+                                        </Route>
 
-                            <Route path="*" element={<ErrorPage />} />
-                        </Routes>
+                                        <Route path="*" element={<ErrorPage />} />
+                                    </Routes>
+                                </div>
+
+                                <Sidebar />
+                            </CommentsProvider>
+                        </div>
                     </div>
 
                     <div id="backgroundGlobal" className="d-none d-md-block">

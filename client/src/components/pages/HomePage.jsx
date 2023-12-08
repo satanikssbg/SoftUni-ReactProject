@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 
 import * as newsService from '../../services/newsService';
 
-import withSidebar from "../../HOC/withSidebar";
-
 import NewsHomeList from "./News/NewsHomeList";
 import Loading from "../layouts/Loading";
 
@@ -53,4 +51,4 @@ const HomePage = () => {
     );
 }
 
-export default withSidebar(HomePage);
+export default HomePage;

@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useReducer, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 import AuthContext from "./authContext";
 
 import * as commentsService from '../services/commentsService';
 
-import { commentsReducer } from '../components/comments/commentsReducer';
+import { commentsReducer, commentsLatestReducer } from '../components/comments/commentsReducer';
 
 import EditCommentModal from "../components/comments/EditCommentModal";
 import ConfirmModal from "../components/layouts/ConfirmModal";
@@ -19,10 +19,24 @@ CommentsContext.displayName = 'CommentsContext';
 export const CommentsProvider = ({
     children
 }) => {
-    const { id } = useParams();
+    //const { id } = useParams();
+    const location = useLocation();
+
+    let id = null;
+
+    if (location.pathname.startsWith('/news/')) {
+        const splitUrl = location.pathname.split('/');
+        const lastElement = splitUrl[splitUrl.length - 1];
+
+        if ((/^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[ab0-9A-Fa-f]{4}-[a-fA-F0-9]{12}$/).test(last) || (/^\d+$/).test(lastElement)) {
+            id = lastElement;
+        }
+    }
+
     const { username } = useContext(AuthContext);
 
     const [comments, dispatch] = useReducer(commentsReducer, []);
+    const [latestCommnets, dispatchLatestComments] = useReducer(commentsLatestReducer, []);
 
     const [editComment, setEditComment] = useState({});
     const [showEditCommentModal, setShowEditCommentModal] = useState(false);
@@ -45,12 +59,27 @@ export const CommentsProvider = ({
         };
     }, [id]);
 
+    useEffect(() => {
+        commentsService.latest()
+            .then(result => {
+                dispatchLatestComments({
+                    type: 'GET_COMMENTS',
+                    payload: result,
+                });
+            });
+    }, []);
+
     const addCommentHandler = async (values) => {
         commentsService.create(id, values.comment)
             .then(newComment => {
                 newComment.author = { username };
 
                 dispatch({
+                    type: 'ADD_COMMENT',
+                    payload: newComment
+                });
+
+                dispatchLatestComments({
                     type: 'ADD_COMMENT',
                     payload: newComment
                 });
@@ -79,6 +108,11 @@ export const CommentsProvider = ({
                     payload: comment
                 });
 
+                dispatchLatestComments({
+                    type: 'EDIT_COMMENT',
+                    payload: comment
+                });
+
                 toast.success('Коментара е редактиран успешно.');
             })
             .catch(error => {
@@ -95,31 +129,38 @@ export const CommentsProvider = ({
     }
 
     const deleteCommentHandler = async () => {
-        setShowEditCommentModal(false);
+        try {
+            setShowEditCommentModal(false);
 
-        commentsService.remove({ id: editComment.id })
-            .then(comments => {
-                dispatch({
-                    type: 'REMOVE_COMMENT',
-                    payload: comments
-                });
-
-                toast.success('Коментара е изтрит успешно.');
-            })
-            .catch(error => {
-                console.error('Грешка при изтриване на коментар:', error);
-                toast.error('Възникна грешка при изтриване на коментар. Моля, опитайте отново.');
-            }).finally(() => {
-                setEditComment({});
+            const comments = await commentsService.remove({ id: editComment.id });
+            dispatch({
+                type: 'REMOVE_COMMENT',
+                payload: comments
             });
-    }
+
+            const result = await commentsService.latest();
+            dispatchLatestComments({
+                type: 'GET_COMMENTS',
+                payload: result,
+            });
+
+            toast.success('Коментара е изтрит успешно.');
+        } catch (error) {
+            console.error('Грешка при изтриване на коментар:', error);
+            toast.error('Възникна грешка при изтриване на коментар. Моля, опитайте отново.');
+        } finally {
+            setEditComment({});
+        }
+    };
 
     const values = {
         comments,
         dispatch,
         addCommentHandler,
         commentEditClickHandler,
-        commentDeleteClickHandler
+        commentDeleteClickHandler,
+        latestCommnets,
+        dispatchLatestComments,
     };
 
     return (

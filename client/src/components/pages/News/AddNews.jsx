@@ -14,8 +14,6 @@ import addNewsValidate from "./addNewsValidate";
 
 import Path from "../../../paths";
 
-import withSidebar from '../../../HOC/withSidebar';
-
 import Loading from "../../layouts/Loading";
 
 import { toast } from 'react-toastify';
@@ -226,4 +224,4 @@ const AddNews = () => {
     );
 }
 
-export default withSidebar(AddNews);
+export default AddNews;

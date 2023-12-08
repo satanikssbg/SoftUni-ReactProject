@@ -12,8 +12,6 @@ import addCommentsValidate from "../../comments/addCommentsValidate";
 
 import { formatDateString } from "../../../utils/functionsUtils";
 
-import withSidebar from "../../../HOC/withSidebar";
-
 import ConfirmModal from "../../layouts/ConfirmModal";
 import CommentsList from "../../comments/CommentsList";
 import Loading from "../../layouts/Loading";
@@ -276,4 +274,4 @@ const Read = () => {
     );
 };
 
-export default withSidebar(Read);
+export default Read;

@@ -7,8 +7,6 @@ import AuthContext from '../../../contexts/authContext';
 
 import * as newsService from '../../../services/newsService';
 
-import withSidebar from '../../../HOC/withSidebar';
-
 import NewsList from './NewsList';
 import PaginateLinks from '../../layouts/PaginateLinks';
 import Loading from '../../layouts/Loading';
@@ -207,4 +205,4 @@ const News = ({ userId }) => {
     );
 };
 
-export default withSidebar(News);
+export default News;
