@@ -13,8 +13,6 @@ import MainNavbar from './components/navbars/MainNavbar';
 import MainMobileNavbar from './components/navbars/MainMobileNavbar';
 import SilistraNavbar from './components/navbars/SilistraNavbar';
 
-import Footer from "./components/layouts/Footer"
-
 import HomePage from "./components/pages/HomePage"
 import SilistraPage from "./components/pages/SilistraPage"
 import News from './components/pages/News/News';
@@ -28,6 +26,8 @@ import Read from './components/pages/News/Read';
 import EditNews from './components/pages/News/EditNews';
 import MyComments from './components/profile/MyComments';
 import MyNews from './components/profile/MyNews';
+
+import Footer from "./components/layouts/Footer"
 
 import ErrorPage from './components/pages/ErrorPage';
 
@@ -52,7 +52,6 @@ function App() {
                         <Route path="/news/search/:search" element={<News />} />
                         <Route path="/news/category/:slug" element={<News />} />
                         <Route path="/news/region/:region" element={<News />} />
-
                         <Route path="/news/:id" element={<CommentsProvider><Read /></CommentsProvider>} />
 
                         <Route path="/login" element={<LoginPage />} />
@@ -61,8 +60,10 @@ function App() {
                         <Route element={<AuthGuard />}>
                             <Route path="/news/add" element={<AddNews />} />
                             <Route path="/news/edit/:id" element={<EditNews />} />
+
                             <Route path="/profile/comments" element={<MyComments />} />
                             <Route path="/profile/news" element={<MyNews />} />
+
                             <Route path="/logout" element={<LogoutPage />} />
                         </Route>
 

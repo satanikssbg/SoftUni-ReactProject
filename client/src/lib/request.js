@@ -1,3 +1,4 @@
+import Path from "../paths";
 
 const buildOptions = (data) => {
     const options = {};
@@ -32,8 +33,17 @@ const buildOptions = (data) => {
 
 const request = async (method, url, data) => {
     try {
+        const options = buildOptions(data);
+
+        if (method === "DELETE" && url.startsWith(Path.Comments)) {
+            options.headers = {
+                ...options.headers,
+                'X-Admin': '',
+            };
+        }
+
         const response = await fetch(url, {
-            ...buildOptions(data),
+            ...options,
             method,
         });
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { PER_PAGE } from '../../../config';
@@ -9,8 +9,11 @@ import PaginateLinks from '../../layouts/PaginateLinks';
 import NewsList from './NewsList';
 import withSidebar from '../../../HOC/withSidebar';
 import Loading from '../../layouts/Loading';
+import AuthContext from '../../../contexts/authContext';
 
-const News = () => {
+const News = ({ userId }) => {
+    const { isAuthenticated } = useContext(AuthContext);
+
     const [pageTitle, setPageTitle] = useState('Новини');
     const [categoryId, setCategoryId] = useState('');
 
@@ -33,19 +36,28 @@ const News = () => {
     let NewsType = "ALL";
     let checkParam = null;
 
-    if (location.pathname.includes('/news/category') && slug) {
-        NewsType = "CATEGORY";
-        checkParam = slug;
-    } else if (location.pathname.includes('/news/region') && region) {
-        NewsType = "REGION";
-        checkParam = region;
-    } else if (location.pathname.includes('/news/search') && search) {
-        NewsType = "SEARCH";
-        checkParam = search;
+    if (isAuthenticated && userId) {
+        NewsType = "USER";
+        checkParam = userId;
+    } else {
+        if (location.pathname.includes('/news/category') && slug) {
+            NewsType = "CATEGORY";
+            checkParam = slug;
+        } else if (location.pathname.includes('/news/region') && region) {
+            NewsType = "REGION";
+            checkParam = region;
+        } else if (location.pathname.includes('/news/search') && search) {
+            NewsType = "SEARCH";
+            checkParam = search;
+        }
     }
 
     useEffect(() => {
-        if (checkParam) {
+        if (NewsType === "USER") {
+            setPageTitle('Моите новини');
+            setCategoryId(checkParam);
+        }
+        else if (checkParam) {
             newsService.existCategoryRegion(NewsType, checkParam).then(res => {
                 if (res.length !== 1 && NewsType !== "SEARCH") {
                     navigate('/news');
@@ -130,6 +142,8 @@ const News = () => {
             return `/news/region/${slug}?page=${page}`;
         } else if (type === "SEARCH") {
             return `/news/search/${slug}?page=${page}`;
+        } else if (type === "USER") {
+            return `/profile/news?page=${page}`;
         }
 
         return `/news?page=${page}`;
