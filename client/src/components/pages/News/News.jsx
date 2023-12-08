@@ -44,26 +44,35 @@ const News = () => {
         checkParam = search;
     }
 
-    if (checkParam) {
-        newsService.existCategoryRegion(NewsType, checkParam).then(res => {
-            if (res.length !== 1 && NewsType !== "SEARCH") {
-                navigate('/news');
-            } else {
-                const result = res[0];
+    useEffect(() => {
+        if (checkParam) {
+            newsService.existCategoryRegion(NewsType, checkParam).then(res => {
+                if (res.length !== 1 && NewsType !== "SEARCH") {
+                    navigate('/news');
+                } else {
+                    const result = res[0];
 
-                if (NewsType === "CATEGORY") {
-                    setCategoryId(result._id);
-                    setPageTitle(`Новини в кагегория ${result.category}`);
-                } else if (NewsType === "REGION") {
-                    setCategoryId(result._id);
-                    setPageTitle(`Новини в регион ${result.region}`);
-                } else if (NewsType === "SEARCH") {
-                    setCategoryId(checkParam);
-                    setPageTitle(`Резултати от търсене за ${checkParam}`);
+                    if (NewsType === "CATEGORY") {
+                        setCategoryId(result._id);
+                        setPageTitle(`Новини в категория ${result.category}`);
+                    } else if (NewsType === "REGION") {
+                        setCategoryId(result._id);
+                        setPageTitle(`Новини в регион ${result.region}`);
+                    } else if (NewsType === "SEARCH") {
+                        setCategoryId(checkParam);
+
+                        if (checkParam.length < 3) {
+                            setPageTitle(`Търсене`);
+                        } else {
+                            setPageTitle(`Резултати от търсене за ${checkParam}`);
+                        }
+                    }
                 }
-            }
-        });
-    }
+            });
+        } else {
+            setPageTitle('Новини');
+        }
+    }, [checkParam, NewsType]);
 
     useEffect(() => {
         newsService.allNewsCount(NewsType, categoryId).then(result => {
@@ -135,29 +144,48 @@ const News = () => {
             <div className="obshtinaHeading">
                 <div className="headingLine" />
                 <div className="headingText">
-                    {pageTitle} ({Number(totalNews)})
+                    {pageTitle}
+
+                    {
+                        (NewsType === "SEARCH" && checkParam.length >= 3 || NewsType !== "SEARCH") ? ` (${Number(totalNews)})` : ''
+                    }
                 </div>
             </div>
 
-            <div id="load-data">
-                {
-                    news.length > 0 && news.map(article =>
-                        <NewsList key={article._id} {...article} />
-                    )
-                }
+            {
+                Number(totalNews) === 0 ? (
+                    <div className="col-12">
+                        <div className="alert alert-danger">Няма намерени новини, по зададените критерии.</div>
+                    </div>
+                ) : (
+                    (NewsType === "SEARCH" && checkParam.length < 3)
+                        ? (
+                            <div className="col-12">
+                                <div className="alert alert-danger">За да използвате търсачката, трябва да въведете минимум 3 символа.</div>
+                            </div>
+                        )
+                        : (
+                            <div id="load-data">
+                                {
+                                    news.length > 0 && news.map(article =>
+                                        <NewsList key={article._id} {...article} />
+                                    )
+                                }
 
-                {totalPages > 1 && (
-                    <>
-                        <PaginateLinks
-                            currentPage={currentPage}
-                            lastPage={totalPages}
-                            paginateLink={paginateLink}
-                            type={NewsType}
-                            slug={checkParam}
-                        />
-                    </>
-                )}
-            </div>
+                                {totalPages > 1 && (
+                                    <PaginateLinks
+                                        currentPage={currentPage}
+                                        lastPage={totalPages}
+                                        paginateLink={paginateLink}
+                                        type={NewsType}
+                                        slug={checkParam}
+                                    />
+                                )}
+                            </div>
+                        )
+                )
+            }
+
         </div>
     );
 };

@@ -80,12 +80,15 @@ export const newsPaginate = async (page, type = "ALL", categoryId = null) => {
         ]
     });
 
+    let escapedSearch = null;
+
     if (type === "CATEGORY") {
         query.append("where", `category="${categoryId}"`);
     } else if (type === "REGION") {
         query.append("where", `region="${categoryId}"`);
     } else if (type === "SEARCH") {
-        query = query.toString() + `&where=title LIKE "${categoryId}"`;
+        escapedSearch = JSON.stringify(categoryId).slice(1, -1);
+        query = query.toString() + `&where=title LIKE "${escapedSearch}"`;
     }
 
     //const queryString = query.toString().replace(/\+/g, '%20');
@@ -98,6 +101,7 @@ export const newsPaginate = async (page, type = "ALL", categoryId = null) => {
 
 export const allNewsCount = async (type = "ALL", categoryId = null) => {
     let query = null;
+    let escapedSearch = null;
 
     if (type === "CATEGORY") {
         query = new URLSearchParams({
@@ -108,7 +112,8 @@ export const allNewsCount = async (type = "ALL", categoryId = null) => {
             where: `region="${categoryId}"`
         });
     } else if (type === "SEARCH") {
-        query = `where=title LIKE "${categoryId}"`;
+        escapedSearch = JSON.stringify(categoryId).slice(1, -1);
+        query = `where=title LIKE "${escapedSearch}"`;
     }
 
     const result = await request.get(`${Path.News}?count${query ? `&${query}` : ''}`);
